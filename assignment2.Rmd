@@ -1,0 +1,255 @@
+
+
+## Coursera: Intro to Computational Finance and Financial Econometrics: Assignment 2: Probability Calculations in R
+
+
+1\. Suppose X is a normally distributed random variable with mean 0.05 and
+variance (0.10)2. Compute the following: 
+
+Pr(X > 0.10)
+
+
+```{r}
+
+    mu_x = 0.05
+    sigma_x = 0.10
+    
+    # Pr(X > 0.10)
+    1 - pnorm(0.10, mean=mu_x, sd=sigma_x)
+
+```
+
+2\. Pr(X < −.10)
+
+
+```{r}
+    
+    pnorm(-0.10, mean=mu_x, sd=sigma_x)
+
+```
+
+3\. Pr(−0.05 < X < 0.15)
+
+    
+```{r}
+
+    pnorm(0.15, mean=mu_x, sd=sigma_x) - pnorm(-0.05, mean=mu_x, sd=sigma_x)
+
+```
+
+4\. 1% quantile, q.01
+
+
+```{r}
+
+    qnorm(0.01, mean=mu_x, sd=sigma_x)
+
+```
+
+5\. 5% quantile, q.05
+
+
+```{r}
+
+    qnorm(0.05, mean=mu_x, sd=sigma_x)
+
+```
+
+
+6\. 95% quantile, q.95
+
+
+```{r}
+
+    qnorm(0.95, mean=mu_x, sd=sigma_x)
+
+```
+
+7\. 99% quantile, q.99
+
+
+```{r}
+
+    qnorm(0.99, mean=mu_x, sd=sigma_x)
+    
+```
+
+8\. Let X denote the monthly return on Microsoft Stock and let Y denote the
+monthly return on Starbucks stock. Assume that X∼N(0.05,(0.10)^2) and
+Y∼N(0.025,(0.05)^2). 
+
+Using a grid of values between –0.25 and 0.35, plot the normal curves for X and
+Y. Make sure that both normal curves are on the same plot.
+
+Which stock has the higher risk? ANSWER: MSFT, because it has a higher SD.
+
+
+```{r}
+
+    library(ggplot2)
+
+    t = seq(-0.25, 0.35, 0.001)
+
+    # MSFT stock
+    mu_x = 0.05
+    sigma_x = 0.10
+    X = dnorm( t, mean=mu_x, sd=sigma_x )
+
+    # SBUX stock
+    mu_y = 0.025
+    sigma_y = 0.05
+    Y = dnorm( t, mean=mu_y, sd=sigma_y )
+
+    ggplot() + 
+        geom_line(aes(x=t, y=X), color="blue") + 
+        geom_line(aes(x=t, y=Y), color="red")
+
+```
+
+9\. Let R denote the simple monthly return on Microsoft stock and let W0 denote
+the initial wealth to be invested over the month. Assume that
+R∼N(0.04,(0.09)2)) and that W0=$100,000
+
+Determine the 1% and 5% value-at-risk (VaR) over the month on the
+investment. That is, determine the loss in investment value that may occur over
+the next month with 1% probability and with 5% probability.
+
+```{r}
+
+    mu_r = 0.04
+    sigma_r = 0.09
+    W0 = 1e5
+
+    # 1% VAR = q_.01(R) * W0
+    # 5% VAR = q_.05(R) * W0
+
+    qnorm(0.01, mean=mu_r, sd=sigma_r) * W0
+    qnorm(0.05, mean=mu_r, sd=sigma_r) * W0
+
+```
+
+10\. Let the r denote the continuously compounded monthly return on Microsoft
+stock and let W0 denote the initial wealth to be invested over the month.
+Assume that r∼iid N(0.04,(0.09)2) and that W0=$100,000.
+
+Determine the 1% and 5% value-at-risk (VaR) over the month on the investment.
+That is, determine the loss in investment value that may occur over the next
+month with 1% probability and with 5% probability. (Hint: compute the 1% and 5%
+quantile from the Normal distribution for r and then convert continuously
+compounded return quantile to a simple return quantile using the transformation
+R=er−1)
+
+
+```{r}
+    
+    mu_r_cc = 0.04
+    sigma_r_cc = 0.09
+
+    # 1% VAR = (exp( q_.01(r_cc) ) - 1) * W0
+    # 5% VAR = (exp( q_.05(r_cc) ) - 1 ) * W0
+
+    W0 * ( exp( qnorm(0.01, mean=mu_r_cc, sd=sigma_r_cc) ) - 1 )
+    W0 * ( exp( qnorm(0.05, mean=mu_r_cc, sd=sigma_r_cc) ) - 1 )
+
+
+```
+
+11\. Consider a one month investment in two Northwest stocks: Amazon and
+Costco. Suppose you buy Amazon and Costco at the end of September at
+PA,t−1=$38.23, PC,t−1=$41.11 and then sell at the end of October for
+PA,t=$41.29, PC,t=$41.74. (Note: these are actual closing prices for 2004 taken
+from Yahoo!)
+
+What are the simple monthly returns for the two stocks?
+
+
+```{r}
+
+    pA0 = 38.23
+    pA1 = 41.29
+
+    pC0 = 41.11
+    pC1 = 41.74
+
+    # simple return: (pt1 - pt0)/pt0
+    R_A = (pA1 - pA0) / pA0
+    R_C = (pC1 - pC0) / pC0
+
+    R_A
+    R_C
+
+
+```
+
+12\. What are the continuously compounded returns for the two stocks?
+
+
+```{r}
+
+    # R = e^r_cc - 1
+    # r_cc = ln(R + 1)
+    r_A = log(R_A + 1)
+    r_C = log(R_C + 1)
+
+    r_A
+    r_C
+    
+```
+
+13\. Suppose Amazon paid a $0.10 per share cash dividend at the end of October. What
+is the monthly simple total return on Amazon? What is the monthly dividend yield?
+
+
+```{r}
+    
+    # simple total return = (pt1 - pt0 + div) / pt0
+    div_A = 0.10
+    R_A_tot = (pA1 - pA0 + div_A)/ pA0
+    R_A_tot
+    
+    # div yield = div / pt0 
+    div_A / pA0
+
+
+```
+
+14\. Suppose the monthly returns on Amazon from question 12 above are the same
+every month for 1 year. Compute the simple annual returns, as well as the
+continuously compounded annual returns.
+
+
+```{r}
+
+    # (1 + R_annual) = (1 + R_monthly)^12
+    R_A_12 = (1 + R_A)^12 - 1
+    R_A_12
+
+    # r_A_cc = ln(1 + R_A)
+    log(1 + R_A_12)
+
+```
+
+15\. At the end of September 2004, supposed you have $10,000 to invest in
+Amazon and Costco over the next month. If you invest $8,000 in Amazon and
+$2,000 in Costco, what are your portfolio shares, xA and xC. 
+
+
+```{r}
+
+    xA = 8/10
+    xC = 2/10
+
+```
+
+16\. Continuing with the previous question, compute the monthly simple return
+on the portfolio. Assume than no dividends are paid.
+
+
+```{r}
+
+    # R_portfolio = w1 * R1 + w2 * R2 + ...
+    R_p = xA * R_A + xC * R_C
+    R_p
+
+```
+

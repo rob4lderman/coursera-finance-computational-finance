@@ -97,7 +97,7 @@ Loops:
 * Subset FAQ: [http://www.ats.ucla.edu/stat/r/faq/subset_R.htm](http://www.ats.ucla.edu/stat/r/faq/subset_R.htm)
 
 
-Vectors:
+#### Vectors:
 
     x <- c(0.5, 0.6)
     x <- c(T,F)     
@@ -153,7 +153,7 @@ Vectors:
     x <- list(a=1, b=2, c=3)
 
 
-Matrices: 
+#### Matrices: 
 
     x <- matrix( nrow=2, ncol=3 )
     x <- matrix(1:6, nrow=2, ncol=3 )  # cols are filled first
@@ -180,7 +180,7 @@ Matrices:
 
 
 
-Data Frames:
+#### Data Frames:
 
     df <- read.table( ... )
     df <- read.csv( "file.csv" )
@@ -211,7 +211,9 @@ Data Frames:
 
 
 
-Data Tables: 
+
+
+#### Data Tables: 
 
 * type of data frame
 * faster and more efficient than data frames
@@ -312,6 +314,9 @@ Working with Dates:
     Sys.Date() // Date object
     format(d,"%m %d")
     as.Date(x, "<format>")
+
+    df$Date.date = as.Date(df$Date, "%Y-%m-%d") 
+
     weekdays(d)
     months(d)
     julian(d)
@@ -632,7 +637,7 @@ First need to setup JAVA_HOME and PATH to avoid these errors:
                       colIndex=c(1:5,7:9))
 
 
-## Extract/Transform/Load data
+## Extract/Transform/Load (ETL) data
 
 
 [https://github.com/natapone/RepData_PeerAssessment1/blob/master/PA1_template.md](https://github.com/natapone/RepData_PeerAssessment1/blob/master/PA1_template.md)
@@ -656,6 +661,8 @@ Subset rows in data frame:
     df[(which(df$var1 > 8),]        # no NAs
 
 
+
+
 Dealing with NA:
 
     x <- c(1, NA, 2, NA, 4)
@@ -669,6 +676,7 @@ Sorting:
 
     df[order(df$var1),] 
     df[order(df$var1, df$var3),] 
+
 
 
 RESHAPING data frames:
@@ -878,6 +886,9 @@ Base plotting system:
     qplot(hwy, data=mpg, fill=drv)      # histogram
     qplot(displ, hwy, data=mpg, facets=. ~ drv)          # facets = row x col.  use "." for 1 row/col
     qplot(displ, hwy, data=mpg, facets= drv ~ ., binwidth=2)   # 1 col (".").  rows determined by drv variable.
+
+    qplot(Date.date, Adj.Close, data=df, geom=c("point", "line"))
+
 
 
     smoothScatter
