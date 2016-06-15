@@ -100,13 +100,18 @@ Keep in mind that the returns are percent per month.
 
 
 ```r
-    R_m = numeric(nrow(df))
+    # R_m = numeric(nrow(df))
 
-    for (i in 2:nrow(df)) {
-        pt0 = df[i-1,]$Adj.Close
-        pt1 = df[i,]$Adj.Close
-        R_m[i] = (pt1 - pt0) / pt0
-    }
+    # for (i in 2:nrow(df)) {
+    #     pt0 = df[i-1,]$Adj.Close
+    #     pt1 = df[i,]$Adj.Close
+    #     R_m[i] = (pt1 - pt0) / pt0
+    # }
+
+    # ....OR....
+    n = nrow(df)
+    R_m = numeric(n)
+    R_m[2:n] = ( df$Adj.Close[2:n] - df$Adj.Close[1:(n-1)] ) / df$Adj.Close[1:(n-1)]
 
     df$Adj.Close.R = R_m
 
@@ -135,11 +140,17 @@ the end of March 1994 through the end of March 1995 etc.
 ```r
     R_a = numeric(nrow(df))
 
-    for (i in 13:nrow(df)) {
-        pt0 = df[i-12,]$Adj.Close
-        pt1 = df[i,]$Adj.Close
-        R_a[i] = (pt1 - pt0) / pt0
-    }
+    # for (i in 13:nrow(df)) {
+    #     pt0 = df[i-12,]$Adj.Close
+    #     pt1 = df[i,]$Adj.Close
+    #     R_a[i] = (pt1 - pt0) / pt0
+    # }
+
+    # ....OR....
+    n = nrow(df)
+    R_a = numeric(n)
+    p = 12        # period
+    R_a[(p+1):n] = ( df$Adj.Close[(p+1):n] - df$Adj.Close[1:(n-p)] ) / df$Adj.Close[1:(n-p)]
 
     df$Adj.Close.R.annual = R_a
 
@@ -160,23 +171,54 @@ of the monthly cc returns.
     # R_cc = log( pt1 / pt0 )
     # R_cc = log(pt1) - log(pt0)
 
-    R_cc1 = numeric(nrow(df))
-    R_cc2 = numeric(nrow(df))
-    R_cc3 = numeric(nrow(df))
+    # R_cc1 = numeric(nrow(df))
+    # R_cc2 = numeric(nrow(df))
+    # R_cc3 = numeric(nrow(df))
 
-    for (i in 2:nrow(df)) {
+    # for (i in 2:nrow(df)) {
 
-        R_cc1[i] = log(1 + df[i,]$Adj.Close.R)
+    #     R_cc1[i] = log(1 + df[i,]$Adj.Close.R)
 
-        pt0 = df[i-1,]$Adj.Close
-        pt1 = df[i,]$Adj.Close
-        R_cc2[i] = log( pt1 / pt0 )
+    #     pt0 = df[i-1,]$Adj.Close
+    #     pt1 = df[i,]$Adj.Close
+    #     R_cc2[i] = log( pt1 / pt0 )
 
-        pt0.log = df[i-1,]$Adj.Close.log
-        pt1.log = df[i,]$Adj.Close.log
-        R_cc3[i] = pt1.log - pt0.log
-    }
+    #     pt0.log = df[i-1,]$Adj.Close.log
+    #     pt1.log = df[i,]$Adj.Close.log
+    #     R_cc3[i] = pt1.log - pt0.log
+    # }
 
+    
+    # ...OR.....
+    n = nrow(df)
+    p = 1         # period
+    
+    R_cc1 = numeric(n)
+    R_cc1[(p+1):n] = log(1 + df$Adj.Close.R[(p+1):n])
+    
+    R_cc2 = numeric(n)
+    R_cc2[(p+1):n] = log(df$Adj.Close[(p+1):n]) - log(df$Adj.Close[1:(n-p)])
+    
+    R_cc3 = numeric(n)
+    R_cc3[(p+1):n] = log(df$Adj.Close[(p+1):n] / df$Adj.Close[1:(n-p)])
+
+    # verify they're (pretty much) the same
+    sum(R_cc1 - R_cc2)
+```
+
+```
+## [1] -6.394624e-16
+```
+
+```r
+    sum(R_cc2 - R_cc3)
+```
+
+```
+## [1] 2.959872e-16
+```
+
+```r
     df$Adj.Close.R.cc = R_cc1
 
     qplot(Date.date, Adj.Close.R.cc, data=df, geom=c("point", "line"))
@@ -198,11 +240,43 @@ annual returns.
     # R_cc = log( pt1 / pt0 )
     # R_cc = log(pt1) - log(pt0)
 
-    R_cca = numeric(nrow(df))
+    # R_cca = numeric(nrow(df))
 
-    for (i in 13:nrow(df)) {
-        R_cca[i] = log(1 + df[i,]$Adj.Close.R.annual)
-    }
+    # for (i in 13:nrow(df)) {
+    #     R_cca[i] = log(1 + df[i,]$Adj.Close.R.annual)
+    # }
+
+    # ...OR.....
+    n = nrow(df)
+    p = 12         # period
+    
+    R_cca1 = numeric(n)
+    R_cca1[(p+1):n] = log(1 + df$Adj.Close.R.annual[(p+1):n])
+    
+    R_cca2 = numeric(n)
+    R_cca2[(p+1):n] = log(df$Adj.Close[(p+1):n]) - log(df$Adj.Close[1:(n-p)])
+    
+    R_cca3 = numeric(n)
+    R_cca3[(p+1):n] = log(df$Adj.Close[(p+1):n] / df$Adj.Close[1:(n-p)])
+
+    # verify they're (pretty much) the same
+    sum(R_cca1 - R_cca2)
+```
+
+```
+## [1] -7.979728e-17
+```
+
+```r
+    sum(R_cca2 - R_cca3)
+```
+
+```
+## [1] -1.654926e-15
+```
+
+```r
+    R_cca = R_cca1
 
     df$Adj.Close.R.cc.annual = R_cca
 
@@ -211,3 +285,21 @@ annual returns.
 
 ![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
 
+9\. Calculate the growth of $1 invested in SBUX.
+
+
+
+```r
+    # gross returns = 1 + simple returns
+    df$Adj.Close.R.gross = 1 + df$Adj.Close.R
+
+    # growth of $1 equals the cumulative product of the gross returns
+    df$Adj.Close.growth = cumprod(df$Adj.Close.R.gross)
+
+    qplot(Date.date, Adj.Close.growth, data=df, geom=c("point", "line"))
+```
+
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
+
+    
+    

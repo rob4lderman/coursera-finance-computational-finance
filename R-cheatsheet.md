@@ -107,7 +107,7 @@ Loops:
     x <- numeric(5)     # x is a vector of length 5
     x <- factor( c("yes", "no", "yes") )
 
-    x <- c("a", "b", "c", "c", "a")
+    x <- c("a", "b", "c", "c", "a")     # c = "combine"
     x[1]
     # [1] "a"
 
@@ -156,12 +156,27 @@ Loops:
 #### Matrices: 
 
     x <- matrix( nrow=2, ncol=3 )
-    x <- matrix(1:6, nrow=2, ncol=3 )  # cols are filled first
-    dim(x)
+    x <- matrix(1:6, nrow=2, ncol=3 )           # cols are filled first
+    x <- matrix(1:6, nrow=2, ncol=3, byrow=T )  # rows are filled first
+
     cbind(x, y)     # bind vectors x and y as columns of new matrix
     rbind(x, y)     # bind vectors x and y as rows of new matrix
     table(x)
+
+    dim(x)   
     dimnames(m) <- list( c("a", "b"), c("c", "d") )     # for matrix
+
+    # convert vector to col matrix
+    y <- c(1,2,3)
+    x = as.matrix(y)            # row=3, col=1, column vector matrix
+
+    
+    t(x)                        # transpose
+    A %*% B                     # matrix multiplication
+    solve(A)                    # matrix inverse AX = b (b = I)
+
+    t(x) %*% y                  # cross product (x1 * y1 + x2 * y2 + ...)
+    crossprod(x,y)
 
     x <- matrix(1:6, 2, 3)
     #      [,1] [,2] [,3]
@@ -197,6 +212,12 @@ Loops:
     df[1:2,"var2"]
 
     table(X$var2, useNA="ifany") // useNA to count the NA values
+
+    sbux_prices_df <- sbux_df[, "Adj.Close", drop=FALSE]    # drop=F - preserve df dimensions
+    rownames(sbux_prices_df) <- sbux_df$Date                # assign row names
+    head(sbux_prices_df)
+    price_1 <- sbux_prices_df["3/1/1994",1]
+    price_2 <- sbux_prices_df["3/1/1995",1]
 
     colSums(is.na(X))
     all(colSums(is.na(X))==0)

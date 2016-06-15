@@ -325,11 +325,20 @@ R:
 
 ## Value at Risk
 
-* Value-at-risk: how much money can you lose, with a certain probability?
+* Value-at-risk: how much money might you lose, with a certain probability?
 * Example: a $10K investement in MSFT, for 1 month
     * R = simple monthly return
     * `R ~ N(0.05, 0.10^2)`
 * Calculate how much we can lost with a specified probability, alpha
+* based on distribution of asset returns
+* the probability is associated with...
+    * the quantile of the return distribution...
+    * at the given probability
+    * so, Value-at-Risk(5% probability) = 5% quantile of the return distribution
+    * which is typically low/negative
+    * multiply the 5% quantile return by the initial investment
+
+
 
 
 Questions to answer:

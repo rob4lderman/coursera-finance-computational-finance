@@ -48,5 +48,22 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 ## [Assignment 2: Probability Calculations in R](assignment2.md)
 
 
+## [Week 3: Probability Review: BiVariate Probabilities](week3.md)
+
+### Location Scale Model
+### BiVariate Probability Distribution
+### Conditional probability
+### BiVariate Continuous Distributions
+### Covariance and Correlation
+### General BiVariate Normal Distribution
+### Linear Combination of Two Random Variables
+### Example: Portfolio Analysis
+### Example: Multi-period continously compounded returns
+
+## [Assignment 3: BiVariate Computations](assignment3.md)
+
+## [Assignment 3: BiVariate Computations in R](assignment3-R.md)
+
+
 
 
