@@ -26,7 +26,7 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 
 ## [Assignment 1: Computing Asset Returns](assignment1.md)
 
-## [Assignment 1b: Computing Asset Returns with R](assignment1b.md)
+## [Assignment 1b: Computing Asset Returns with R](assignment1b/assignment1b.md)
 
 
 
@@ -45,7 +45,7 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 ### Linear Functions of Random Variables
 ### Value at Risk
 
-## [Assignment 2: Probability Calculations in R](assignment2.md)
+## [Assignment 2: Probability Calculations in R](assignment2/assignment2.md)
 
 
 ## [Week 3: Probability Review: BiVariate Probabilities](week3.md)
@@ -62,7 +62,7 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 
 ## [Assignment 3: BiVariate Computations](assignment3.md)
 
-## [Assignment 3: BiVariate Computations in R](assignment3-R.md)
+## [Assignment 3: BiVariate Computations in R](assignment3-R/assignment3-R.md)
 
 
 
