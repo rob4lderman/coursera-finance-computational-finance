@@ -66,4 +66,19 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 
 
 
+## [Week 4: Matrix Review and Time Series Concepts](week4.md)
+
+### Matrix Review: Portfolio Math
+### MultiVariate Normal Distribution
+### Time Series Concepts
+### Auto-correlation and Auto-covariance
+### White Noise Process
+### Non-Stationary Processes
+### Moving Average Processes
+### Auto-Regressive Processes
+
+## [Assignment 4: Matrix Algebra](assignment4.md)
+
+## [Assignment 4: Time Series Simulations in R](assignment4-R/assignment4-R.md)
+
 
