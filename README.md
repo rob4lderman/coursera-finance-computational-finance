@@ -62,7 +62,7 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 
 ## [Assignment 3: BiVariate Computations](assignment3.md)
 
-## [Assignment 3: BiVariate Computations in R](assignment3-R/assignment3-R.md)
+## [Assignment 3-R: BiVariate Computations in R](assignment3-R/assignment3-R.md)
 
 
 
@@ -79,6 +79,47 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 
 ## [Assignment 4: Matrix Algebra](assignment4.md)
 
-## [Assignment 4: Time Series Simulations in R](assignment4-R/assignment4-R.md)
+## [Assignment 4-R: Time Series Simulations in R](assignment4-R/assignment4-R.md)
+
+
+## [Week 5: Descriptive Statistics](week5.md)
+
+### Covariant Stationarity
+### Descriptive Sample Statistics
+### Empirical Quantiles/Percentiles
+### Historical Value-at-Risk
+### Sample Statistics
+### Empirical CDF
+### QQ Plot: Quantile-Quantile Plot
+### Outliers
+### Graphical Measures
+### Four Graph Summary
+### BiVariate Sample Statistics
+### Time-Series Descriptive Statistics
+### Summary of Stylized Facts for Monthly CC Returns
+### Stylized Facts for DAILY Returns
+
+## [Assignment 5: Linear Combinations of RVs, Portfolios, Time-Dependence Models](assignment5.md)
+
+## [Assignment 5-R: Analyzing Monthly Returns in R](assignment5-R/assignment5-R.md)
+
+
+## [Week 6: Constant Expected Return Model](week6.md)
+
+### Constant Expected Return Model
+### Regression Model Representation (CER Model)
+### Monte Carlo Simulation
+### Monte Carlo Simulation: Multivariate Returns
+### Random Walk Model (RW)
+### Estimating Parameters of CER model
+### Properties of Estimators
+### Mean Squared Error
+### Standard Errors
+### Asymptotic Properties of Estimators
+### Central Limit Theorem
+### Confidence Intervals
+### Stylized Facts for the Estimation of CER Model Parameters
+### Monte Carlo Simulation to Evaluate CER Model Parameters
+### Value-at-Risk in the CER Model
 
 

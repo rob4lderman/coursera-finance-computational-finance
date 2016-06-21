@@ -1,0 +1,282 @@
+
+# Coursera: Intro to Computational Finance: Assignment 5-R: Analyzing stock returns
+
+1\. Assign to SBUX_prices the prices of the Starbucks stock in the same way as
+VBLTX and FMAGX.
+
+Change the class of the index of SBUX_prices with the as.yearmon() function.
+
+Print the start and the end of the time series to the console by applying the
+start() and end() functions on one of the price time series.
+
+```{r}
+
+    # install.packages("PerformanceAnalytics")
+    # install.packages("zoo")
+    # install.packages("tseries")
+
+    library(PerformanceAnalytics)
+    library(zoo)
+    library(tseries)
+
+    # Get the monthly adjusted closing price data on VBLTX, FMAGX and SBUX from
+    # Yahoo! using the tseries function get.hist.quote(). Set the sample to Jan
+    # 1998 through Dec 2009.
+
+    # Get the adjusted closing prices from Yahoo!
+    VBLTX_prices <- get.hist.quote(instrument="vbltx", 
+                                   start="1998-01-01",
+                                   end="2009-12-31", 
+                                   quote="AdjClose",
+                                   provider="yahoo", 
+                                   origin="1970-01-01",
+                                   compression="m", 
+                                   retclass="zoo", 
+                                   quiet=TRUE)
+                         
+    FMAGX_prices <- get.hist.quote(instrument="fmagx", 
+                                   start="1998-01-01",
+                                   end="2009-12-31", 
+                                   quote="AdjClose",
+                                   provider="yahoo", 
+                                   origin="1970-01-01",
+                                   compression="m", 
+                                   retclass="zoo", 
+                                   quiet=TRUE)
+
+    SBUX_prices <- get.hist.quote(instrument="sbux", 
+                                   start="1998-01-01",
+                                   end="2009-12-31", 
+                                   quote="AdjClose",
+                                   provider="yahoo", 
+                                   origin="1970-01-01",
+                                   compression="m", 
+                                   retclass="zoo", 
+                                   quiet=TRUE)
+
+    
+    # Change the class of the time index to yearmon which is appropriate for monthly data
+    # index() and as.yearmon() are functions in the zoo package  
+    
+    index(VBLTX_prices) <- as.yearmon(index(VBLTX_prices))
+    index(FMAGX_prices) <- as.yearmon(index(FMAGX_prices))
+    index(SBUX_prices) <- as.yearmon(index(SBUX_prices))
+
+    start(SBUX_prices)
+    end(SBUX_prices)
+
+
+```
+
+2\. Assign to all_prices the merged price series VBLTX_prices, FMAGX_prices,
+SBUX_prices such that each column contains the prices of one stock.
+
+Calculate the continuously compounded returns with the help of the diff() and
+log() functions.
+
+Have a look at the data in the console.
+
+
+```{r}
+
+    # Create merged price data
+    all_prices = merge(VBLTX_prices, FMAGX_prices, SBUX_prices)
+
+    # Rename columns
+    colnames(all_prices) <- c("VBLTX", "FMAGX", "SBUX")
+    
+    # Calculate cc returns as difference in log prices
+    all_returns = diff( log( all_prices ) )
+    
+    # Look at the return data
+    start(all_returns)
+    end(all_returns)
+    colnames(all_returns) 
+    head(all_returns)
+
+
+```
+
+3\.  Generate a cumulative return plot with the chart.CumReturns function. Make sure
+that you understand how the simple returns are calculated and use them as input
+of the function. Furthermore, set the wealth.index argument to TRUE to show the
+future value of the $1 invested in the assets. To finish things up, show the
+legend in the left top and add the title "Future Value of $1 invested" to the
+plot.
+
+
+```{r}
+
+    # Plot returns after using the PerformanceAnalytics function chart.TimeSeries().
+    # This function creates a slightly nicer looking plot than plot.zoo()
+    chart.TimeSeries(all_returns, legend.loc="bottom", main=" ") 
+    
+    # The previous charts are a bit hard to read. The PerformanceAnalytics function
+    # chart.Bar makes it easier to compare the returns of different assets on the 
+    # same plot
+    chart.Bar(all_returns, legend.loc="bottom", main=" ")
+    
+    # Get a feel for lag, diff.
+    class(all_prices)
+    head(all_prices)
+    head(lag(all_prices,k=-1))
+    head(lag(all_prices,k=1))
+    head(diff(all_prices))
+    head(diff(all_prices,lag=2))
+
+    # Cumulative return plot - must use simple returns (!) and not cc returns for this
+    # Use PerformanceAnalytics function chart.CumReturns()
+    # diff(all_prices)
+    simple_returns <- diff(all_prices)/lag(all_prices, k=-1);
+    head(simple_returns)
+
+    chart.CumReturns( simple_returns, 
+                      wealth.index=T, 
+                      legend.loc="topleft", 
+                      main="Future Value of $1 invested")
+
+
+```
+
+4\. Generate a four-panel plot of monthly returns:
+
+1. histogram (shows distribution of returns)
+2. boxplot (shows inter-quantile spread, outliers)
+3. smoothed density histogram
+4. QQ-normal plot (compares sample quantiles against normal dist quantiles)
+
+```{r}
+
+    # Create matrix with returns
+    return_matrix <- coredata(all_returns);
+    
+    # Generate four panel plots
+    par(mfrow=c(2,2))
+
+    hist(return_matrix[,"VBLTX"],
+         main="VBLTX monthly returns",
+         xlab="VBLTX", 
+         probability=T, 
+         col="slateblue1")
+
+    boxplot(return_matrix[,"VBLTX"],
+            outchar=T, 
+            main="Boxplot", 
+            col="slateblue1")
+
+    plot(density(return_matrix[,"VBLTX"]),
+         type="l", 
+         main="Smoothed density",
+         xlab="monthly return", 
+         ylab="density estimate", 
+         col="slateblue1")
+
+    qqnorm(return_matrix[,"VBLTX"], 
+           col="slateblue1")
+
+    qqline(return_matrix[,"VBLTX"])
+
+    par(mfrow=c(1,1))
+
+```
+
+5\. Generate three boxplots of the returns of the respective three financial
+assets by using the chart.Boxplot function. Compare the volatility of all three
+boxplots. 
+
+
+```{r}
+    # Create matrix with returns
+    return_matrix <- coredata(all_returns);
+    
+    # Show boxplot of three series on one plot
+    boxplot(return_matrix[,"VBLTX"], 
+            return_matrix[,"FMAGX"], 
+            return_matrix[,"SBUX"],
+            names=colnames(return_matrix), 
+            col="slateblue1")
+    
+    # Do the same thing using the PerformanceAnalytics function chart.Boxplot
+    chart.Boxplot(all_returns)
+
+
+```
+
+
+6\.  Use the apply() function to print the skewness of the three assets to the console.
+
+Use the apply() function to print the kurtosis of the three assets to the console.
+
+Print numerous descriptive statistics to the console with the table.Stats() function.
+
+```{r}
+
+    # Create matrix with returns
+    return_matrix <- coredata(all_returns);
+    
+    summary(return_matrix)
+    
+    # Compute descriptive statistics by column using the base R function apply()
+    args(apply)
+    apply(return_matrix, 2, mean)
+    apply(return_matrix, 2, var)
+    apply(return_matrix, 2, sd)
+
+    apply(return_matrix, 2, skewness)
+
+    # Note: by default, kurtosis() shows the EXCESS KURTOSIS (over 3)
+    apply(return_matrix, 2, kurtosis)
+    apply(return_matrix, 2, kurtosis,method="excess")
+    apply(return_matrix, 2, kurtosis,method="moment")
+    
+    # A nice PerformanceAnalytics function that computes all of the relevant
+    # descriptive statistics is table.Stats
+    table.Stats(all_returns)
+
+```
+
+
+
+7\.  Print the annualized continuously compounded mean to the console.
+
+Print the annualized standard deviation to the console.
+
+
+```{r}
+
+    # Annualized continuously compounded mean 
+    apply(12 * return_matrix, 2, mean)
+    
+    # Annualized simple mean
+    exp(12*apply(return_matrix, 2, mean)) - 1;
+    
+    # Annualized standard deviation values
+    sqrt(12) * apply(return_matrix, 2, sd)
+
+
+```
+
+8\. Create all possible pair-wise scatter plots between the series with the
+pairs() function. Additionally, set the pch argument to 16 and the col argument
+to slateblue1 in the pairs() function.
+
+Print the 3 x 3 covariance and correlation matrix of the returns to the console.
+
+
+
+```{r}
+    # Display all possible pair-wise scatter plots
+    pairs(return_matrix, 
+          pch=16,
+          col="slateblue1")
+    
+    
+    # Compute 3 x 3 covariance and correlation matrices
+    var(return_matrix)
+    cor(return_matrix)
+
+```
+
+
+
+

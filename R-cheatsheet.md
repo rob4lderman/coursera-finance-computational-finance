@@ -193,6 +193,14 @@ Loops:
     #      [,1] [,2] [,3]
     # [1,]    1    3    5
 
+    # covariance and correlation matrices
+    cov.mat = var(returns.mat)
+    cor.mat = cor(returns.mat)
+
+    # lower.tri 
+    covhat.vals = cov.mat[ lower.tri(cov.mat) ]
+    rhohat.vals = cor.mat[ lower.tri(cor.mat) ]
+
 
 
 #### Data Frames:
@@ -775,6 +783,8 @@ tidyr: for cleaning/transforming data frames
     nrow
     ncol
 
+    # pair-wise scatterplots between all datasets
+    pairs(cbind(gwn,MSFT,SP500))
 
 
 
