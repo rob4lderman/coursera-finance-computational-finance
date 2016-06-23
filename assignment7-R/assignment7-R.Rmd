@@ -1,0 +1,493 @@
+
+
+# Coursera: Intro to Computational Finance: Assignment 7: CER Model 
+
+
+### Load Data
+
+```{r}
+
+    library(PerformanceAnalytics)
+    library(tseries)
+    library(zoo)
+
+    # bond fund index
+    # tseries :: get.hist.quote
+    VBLTX_prices <- get.hist.quote(instrument="vbltx", 
+                                   start="2005-09-01", 
+                                   end="2010-09-30", 
+                                   quote="AdjClose",
+                                   provider="yahoo", 
+                                   origin="1970-01-01",
+                                   compression="m", 
+                                   retclass="zoo", 
+                                   quiet = TRUE)
+
+    # fidelity magellan mutual fund index
+    FMAGX_prices <- get.hist.quote(instrument="fmagx", 
+                                   start="2005-09-01", 
+                                   end="2010-09-30", 
+                                   quote="AdjClose",
+                                   provider="yahoo", 
+                                   origin="1970-01-01",
+                                   compression="m", 
+                                   retclass="zoo", 
+                                   quiet = TRUE)
+
+    # starbucks
+    SBUX_prices <- get.hist.quote(instrument="sbux", 
+                                  start="2005-09-01",
+                                  end="2010-09-30", 
+                                  quote="AdjClose",
+                                  provider="yahoo", 
+                                  origin="1970-01-01",
+                                  compression="m", 
+                                  retclass="zoo", 
+                                  quiet = TRUE)
+    class(SBUX_prices)  # "zoo"
+    head(SBUX_prices)
+    
+    # Change the class of the time index to yearmon, which is appropriate for monthly data.
+    # index() and as.yearmon() are functions in the zoo package 
+    index(VBLTX_prices) <- as.yearmon(index(VBLTX_prices))
+    index(FMAGX_prices) <- as.yearmon(index(FMAGX_prices))
+    index(SBUX_prices) <- as.yearmon(index(SBUX_prices))
+    head(SBUX_prices)
+    
+    # Create merged price data
+    all_prices <- merge(VBLTX_prices, FMAGX_prices, SBUX_prices)
+    class(all_prices)
+    head(all_prices)
+
+    # Rename columns
+    colnames(all_prices) <- c("VBLTX", "FMAGX", "SBUX")
+    
+    # Calculate cc returns as difference in log prices
+    all_returns <- diff(log(all_prices))
+    class(all_returns)      # "zoo"
+    head(all_returns)
+    
+    # Create matrix with returns
+    return_matrix <- coredata(all_returns)
+    class(return_matrix)
+    head(return_matrix)
+
+```
+
+#### Analytical formulas for SE:
+
+    SE(^mu_i) = sigma_i / sqrt(T)
+
+    SE(^sigma_i^2) ~= sigma_i^2 / sqrt(T/2)
+    
+    SE(^sigma_i) ~= sigma_i / sqrt(2*T)
+    # Note: SE(^sigma_i) is smaller than SE(^mu) by factor of sqrt(2)
+    # i.e. we estimate volatility much better than mean
+    
+    SE(^sigma_ij):  no easy formula
+    
+    SE(^rho_ij) ~= (1 - rho_ij^2) / sqrt(T)
+
+
+### 1\. What is the estimate of `^SE(^sigma_FMAGX^2)`?
+
+I.e. the standard error (estimate) of the estimate for the variance of FMAGX?
+
+#### ANSWER: 
+
+    #                             VBLTX       FMAGX        SBUX
+    # returns.sigma2hat    0.0008640247 0.004510303 0.010734682
+    # returns.sigma2hat.se 0.0001577486 0.000823465 0.001959876
+
+#### R:
+
+
+```{r}
+
+    # ^SE(^sigma_i^2) ~= ^sigma_i^2 / sqrt(T/2)
+    T = nrow(return_matrix)
+
+    returns.sigma2hat <- apply(return_matrix, 2, var)
+    returns.sigma2hat.se <- returns.sigma2hat / sqrt(T/2)
+
+    rbind(returns.sigma2hat,
+          returns.sigma2hat.se)
+
+```
+
+### 2\. What is `^SE(^rho_VBLTX,FMAGX)`?
+
+I.e. the standard error (estimate) of the correlation coefficient between VBLTX and FMAGX?
+
+#### ANSWER:
+
+    #                   FMAGX,VBLTX SBUX,VBLTX SBUX,FMAGX
+    # returns.rhohat      0.1874161 -0.1355169 0.61306150
+    # returns.rhohat.se   0.1245649  0.1267286 0.08057814
+
+#### R:
+
+```{r}
+
+    # SE(^rho_ij) ~= (1 - rho_ij^2) / sqrt(T)
+    returns.rhohat.mat <- cor(return_matrix)
+    returns.rhohat.mat
+
+    returns.rhohat <- returns.rhohat.mat[ lower.tri(returns.rhohat.mat) ]
+    names(returns.rhohat) <- c("FMAGX,VBLTX", "SBUX,VBLTX", "SBUX,FMAGX")
+
+    returns.rhohat.se <- (1 - returns.rhohat^2) / sqrt(T)
+
+    rbind(returns.rhohat,
+          returns.rhohat.se)
+
+```
+
+### 3\. For which assets do you reject the null hypothesis at the 5% significance level? 
+
+    H0: mu_i = 0 
+
+    H1: mu_i != 0 
+
+#### ANSWER: none
+
+    #              VBLTX       FMAGX       SBUX
+    # t.stat   1.5540662 -0.09312872 0.03631267
+    # p.values 0.1255169  0.92611682 0.97115563
+
+#### R:
+
+```{r}
+
+    # ^SE(^mu_i) = ^sigma_i / sqrt(T)
+    returns.sigmahat <- apply(return_matrix, 2, sd)
+
+    returns.muhat <- apply(return_matrix, 2, mean)
+
+    returns.muhat.se <- returns.sigmahat / sqrt(T)
+
+    # Reject if abs(t.stat) > 2
+    t.stat <- (returns.muhat - 0) / returns.muhat.se
+
+    # two-sided p-values
+    p.values <- 2 * (1 - pt(abs(t.stat), df=T-1)) 
+
+    rbind( returns.sigmahat,
+           returns.muhat,
+           returns.muhat.se )
+
+    rbind(t.stat,
+          p.values)
+
+    # OR, using t.test:
+    # apply(return_matrix, 2, t.test, mu=0, conf.level=0.95)
+    apply(all_returns, 2, t.test, mu=0, conf.level=0.95)
+
+
+```
+
+### 4\.For which assets do you reject the null hypothesis at the 5% significance level?  
+
+    H0: rho_ij = 0 
+    
+    H1: rho_ij != 0 
+
+    SE(^rho_ij) ~= (1 - rho_ij^2) / sqrt(T)
+
+Note: According to here: [http://www.sjsu.edu/faculty/gerstman/StatPrimer/correlation.pdf](http://www.sjsu.edu/faculty/gerstman/StatPrimer/correlation.pdf)
+and here: [https://onlinecourses.science.psu.edu/stat501/node/259](https://onlinecourses.science.psu.edu/stat501/node/259),
+the exact formula for `^SE(^rho)` is:
+
+    ^SE(^rho) = sqrt( (1-rho^2) / (n-2) )
+
+
+#### ANSWER: sbux,fmagx
+
+    #                    FMAGX,VBLTX SBUX,VBLTX   SBUX,FMAGX
+    # t.stat           1.5045664 -1.0693477 7.608285e+00
+    # p.values         0.1378621  0.2893433 2.783647e-10
+    # t.stat.exact     1.4530659 -1.0416753 5.909784e+00
+    # p.values.exact   0.1515948  0.3018850 1.918827e-07
+
+#### R:
+
+```{r}
+
+    returns.rhohat.se.exact <- sqrt( (1 - returns.rhohat^2) / (T-2) )
+
+    rbind(returns.rhohat,
+          returns.rhohat.se,
+          returns.rhohat.se.exact)
+
+    t.stat <- (returns.rhohat - 0) / returns.rhohat.se
+    t.stat.exact <- (returns.rhohat - 0) / returns.rhohat.se.exact
+
+    # two-sided p-values
+    p.values <- 2 * (1 - pt(abs(t.stat), df=T-2)) 
+    p.values.exact <- 2 * (1 - pt(abs(t.stat.exact), df=T-2)) 
+
+    rbind(t.stat,
+          p.values,
+          t.stat.exact,
+          p.values.exact)
+
+    # using cor.test:
+    cor.test(return_matrix[,"FMAGX"],
+             return_matrix[,"VBLTX"])
+    cor.test(return_matrix[,"SBUX"],
+             return_matrix[,"VBLTX"])
+    cor.test(return_matrix[,"SBUX"],
+             return_matrix[,"FMAGX"])
+
+```
+
+### 5\. For which assets do you reject the null hypothesis at the 5% significance level? 
+
+    H0: r_it ∼ normal 
+    
+    H1: r_it ∼ not normal 
+
+#### ANSWER: All
+
+    #                   VBLTX        FMAGX         SBUX
+    # returns.JB 2.225799e+01 2.600108e+01 1.451785e+01
+    # p.values   1.468044e-05 2.259104e-06 7.038635e-04
+
+#### R:
+
+```{r}
+
+    # JB = 1/6 * (^skew_it^2 + ^ekurt^2 / 4)
+    # JB ~ chi^2(2)
+
+    # t-stat = JB
+    # can only be positive, only worried about right tail
+    # Reject if t.stat > qchisq_.95 
+    # Reject if t.stat > 6
+
+    # R: tseries :: jarque.bera.test
+
+    returns.skewhat <- apply(return_matrix, 2, skewness)
+
+    returns.ekurthat <- apply(return_matrix, 2, kurtosis)
+
+    rbind(returns.skewhat,
+          returns.ekurthat )
+
+    returns.JB <- T/6 * (returns.skewhat^2 + returns.ekurthat^2 / 4)
+
+    # p-values
+    p.values <- 1 - pchisq( returns.JB, df=2 )
+
+    rbind( returns.JB,
+           p.values)
+
+    # using tseries :: jarque.bera.test
+    apply( return_matrix, 2, jarque.bera.test )
+
+```
+
+### 6\.  For which of the following parameters do you expect your bootstrap SE value to be accurate? 
+
+(Hint: Do the bootstrap distributions look normal?)
+    
+    5% Var          <-- YES
+    ^rho_ij         <-- NO!! (says the test answers)
+    ^mu_i           <-- YES
+    ^sigma_i        <-- YES
+
+
+#### `^mu_i`, Brute Force
+
+```{r}
+
+    # generate bootstrap distribution
+    # compute summary statistic on each distribution
+    # plot distribution of summary statistic
+
+    R <- 999            # bootstrap iterations
+    muhat.boot <- matrix(0,nrow=R,ncol=ncol(return_matrix))
+    colnames(muhat.boot) <- colnames(return_matrix)
+
+    set.seed(123)
+    for (i in 1:R) {
+        return_matrix.boot <- apply(return_matrix, 2, sample, replace=T)
+        muhat.boot[i,] = apply(return_matrix.boot, 2, mean)
+    }
+
+    head(muhat.boot)
+
+    # bootstrap bias estimate
+    returns.muhat.boot <- apply(muhat.boot, 2, mean)
+    rbind(returns.muhat,
+          returns.muhat.boot)
+
+    # bootstrap SE estimate
+    returns.muhat.se.boot <- apply(muhat.boot, 2, sd)
+    rbind(returns.muhat.se,
+          returns.muhat.se.boot)
+
+    # plots 
+    for (i in 1:ncol(muhat.boot)) {
+        par(mfrow=c(1,2))
+        asset.name <- colnames(muhat.boot)[i]
+        hist(muhat.boot[,i], 
+             col="slateblue1", 
+             main=paste("Bootstrapped means,", asset.name) )
+        abline(v=returns.muhat[i], 
+               col="white", 
+               lwd=2)
+
+        qqnorm(muhat.boot[,i])
+        qqline(muhat.boot[,i])
+        par(mfrow=c(1,1))
+    }
+
+```
+
+
+#### `^sigma_i`, Using R's boot package:
+
+```{r}
+
+    library(boot)
+    
+    # -rx- bootstrap separately in order to see separate plots
+    # sd.boot.fun = function(x, idx) {
+    #     apply(x[idx,], 2, sd)
+    # }
+
+    # sigmahat.boot = boot(data=return_matrix, 
+    #                      statistic=sd.boot.fun,
+    #                      R=999)
+    
+    # SE(^sigma_i) ~= sigma_i / sqrt(2*T)
+    returns.sigmahat.se <- returns.sigmahat / sqrt(2*T)
+
+    # The analytical SE
+    rbind(returns.sigmahat,
+          returns.sigmahat.se)
+
+    # bootstrap each asset separately in order to see separate plots.
+    for (i in 1:ncol(return_matrix)) {
+        sigmahat.boot = boot(data=return_matrix[,i], 
+                             statistic=function(x,idx) { sd(x[idx]) },
+                             R=999)
+        print(sigmahat.boot)
+        plot(sigmahat.boot)
+    }
+
+```
+
+#### `rho_ij`, Using R's boot package
+
+```{r}
+
+
+    # -rx- boot + plot them separately
+    # rhohat.boot = boot(data=return_matrix, 
+    #                    statistic=function(x,idx) {
+    #                        cor.mat <- cor(x[idx,])
+    #                        cor.mat[lower.tri(cor.mat)]
+    #                    },
+    #                    R=999)
+
+    # rhohat.boot
+    # returns.rhohat
+    # returns.rhohat.se
+
+    # plot(rhohat.boot)
+
+    returns.rhohat
+    returns.rhohat.se
+
+    boot.fun = function(x,idx) {
+        cor.mat <- cor(x[idx,])
+        cor.mat[1,2]
+    }
+
+    # bootstrap each correlation separately in order to see the separate plots
+    # 1.
+    rhohat.boot = boot(data=return_matrix[, c("VBLTX","FMAGX")], 
+                       statistic=boot.fun,
+                       R=999)
+    rhohat.boot
+    plot(rhohat.boot)
+
+    # 2.
+    rhohat.boot = boot(data=return_matrix[,c("VBLTX","SBUX")], 
+                       statistic=boot.fun,
+                       R=999)
+    rhohat.boot
+    plot(rhohat.boot)
+
+    # 3.
+    rhohat.boot = boot(data=return_matrix[,c("FMAGX","SBUX")], 
+                       statistic=boot.fun,
+                       R=999)
+    rhohat.boot
+    plot(rhohat.boot)
+
+
+
+```
+
+#### `5% VaR`, Using R's boot package
+
+
+    # compute quantile:
+    q_.05 = ^mu + ^sigma * q_.05(z)
+
+    # Convert cc return to simple return:
+    1 + R = exp(r)
+    R = exp(r) - 1
+
+    VaR_.05 = R * W0
+
+    VaR_.05 = (exp(q_.05) - 1
+    
+    or, qnorm(0.05, mean=^mu, sd=^sigma)
+
+```{r}
+
+    
+    # bootstrap each asset separately in order to see the plots.
+    for (i in 1:ncol(return_matrix)) {
+        var05.boot = boot(data=return_matrix[,i], 
+                          statistic=function(x,idx) { 
+                              muhat = mean(x[idx])
+                              sigmahat = sd(x[idx])
+                              q05 = muhat + sigmahat * qnorm(0.05)
+                              var05 = (exp(q05) - 1)
+                              var05
+                          },
+                          R=999)
+        print(var05.boot)
+        plot(var05.boot)
+    }
+
+```
+
+
+### 7\.  Under the assumptions of the Constant Expected Return Model, solve the following:
+
+    what is E[r_i'^2], 
+    
+    where r_i' = 1/T * SUM_t=1..T r_it
+
+    (You may find the relation Var(Y)=E(Y^2)−E(Y)^2 useful.)
+
+#### ANSWER:
+
+    Var(r') = SE(r')^2 = ( sigma/sqrt(T) )^2 
+            
+            = sigma^2 / T
+
+    Var(r') = E[r'^2] - E[r']^2
+
+    E[r'^2] = Var(r') + E[r']^2
+
+           = sigma^2/T + mu^2
+
+
+

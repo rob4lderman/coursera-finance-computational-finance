@@ -32,6 +32,7 @@
 * Essentially we are treating returns as...
     * random draws from a multi-variate normal distribution
 
+.
 
     r_it = cc return on asset i in month t
 

@@ -123,3 +123,25 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 ### Value-at-Risk in the CER Model
 
 
+## [Week 7: Bootstrapping and Hypothesis Testing](week7.md)
+
+### Bootstrapping
+### Bootstrapping in the CER Model
+### Bootstrapping Procedure
+### Bootstrap 95% Confidence Intervals
+### Performing Bootstrap in R:
+### Bootstrapping Value-at-Risk
+### Hypothesis testing
+### Power of Test
+### Hypothesis Testing in CER Model
+### Chi-square random variable and distribution
+### Student's t random variable and distribution
+### Example: Hypothesis Test for Specific Coefficient Value
+### Example: Test for Normal Distribution
+### Example: Test for No Autocorrelation
+### Example: Diagnostics for Constant Parameters (Rolling Avgs)
+### Summary of Hypothesis Testing in CER Model
+
+## [Assignment 7-R: CER Model Computations in R](assignment7-R/assignment7-R.md)
+
+
