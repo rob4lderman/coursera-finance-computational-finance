@@ -145,3 +145,21 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 ## [Assignment 7-R: CER Model Computations in R](assignment7-R/assignment7-R.md)
 
 
+## [Week 8: Portfolio Theory](week8.md)
+
+### Portfolio Theory
+### Portfolio Value-at-Risk
+### Portfolio Frontier
+### Global Minimum Variance Portfolio
+### Portfolio Theory with a Risk-Free Asset
+### Portfolio Frontier: Risk-free Asset + Risky Asset, Sharpe Ratio
+### Tangency Portfolio: Risk-Free Asset + 2 Risky Assets
+### Efficient Portfolio Examples
+### Matrix Algebra: Portfolio w/ More Than 2 Assets
+### Covariance Between Two Portfolios
+### Matrix Algebra: Computing Global Minimum Variance Portfolio
+### Matrix Algebra: Finding Efficient Portfolios
+
+
+## [Assignment 8-R: Portfolio Computations in R](assignment8-R/assignment8-R.md)
+

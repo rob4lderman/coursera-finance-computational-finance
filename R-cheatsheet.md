@@ -201,6 +201,8 @@ Loops:
     covhat.vals = cov.mat[ lower.tri(cov.mat) ]
     rhohat.vals = cor.mat[ lower.tri(cor.mat) ]
 
+    diag(Sigma.mat)                 # extract diagonal
+    diag(Sigma.mat) <- c(1,2,3)     # set diagonal
 
 
 #### Data Frames:
