@@ -1,0 +1,41 @@
+
+
+# Portfolio Analysis of My 401K
+
+TODO: Research all funds
+      Full return history
+      Recent return history
+      Recession return history
+
+TODO: Portfolio Analysis on all funds
+
+
+## My Investments
+
+* LARGE COMPANY IDX
+    * Tracks the S&P500 (^GSPC)
+    * 28.70%
+* LARGE-CAP GROWTH IDX
+    * Tracks Russell 1000 Growth Index (symbol: ^RLG, VRGWX)
+    * 28.55%
+* VANG ST TREASURY ADM (VFIRX)
+    * Short-term Govt Bonds
+    * 23.97%
+* MODERATE LS
+    * Weight: 18.78%
+    * 12% Inflation Protected Bond Fund
+        * Tracks Barclays U.S. Treasury Inflation Protected Securities - Series L Index.
+    * 20% Total Bond Market & Interest Income Funds
+        * Total Bond Market: Tracks Barclays U.S. Aggregate Bond Index
+        * Interest Income Fund: ?
+    * 3% High Yield & Emerging Markets Bond Fund
+        * ?
+    * 6% Real Estate Investment Trust Index Fund
+    * 2% International Real Estate Index Fund
+    * 10% Balanced Exposure Fund
+    * 3% Commodities Fund
+    * 31% Total Stock Market Index Fund 
+    * 13% Total International Stock Market Index Fund. 
+    * State Street Global Advisors periodically rebalances the fund to the target allocations.
+
+

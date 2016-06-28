@@ -545,9 +545,9 @@ This can be solved numerically or analytically.
 
     This is long and tedious to solve, but eventually you get to:
         
-           Sigma^-1 * (mu - rf * 1)
+           Sigma^-1 %*% (mu - rf * 1)
     x = -----------------------------
-         1' * Sigma^-1 * (mu -rf * 1)
+         1' %*% Sigma^-1 %*% (mu -rf * 1)
 
 
 

@@ -21,7 +21,7 @@
 ## <a name="cerm"></a>Constant Expected Return Model
 
 * Assumptions
-    * normal distribution of monthly returns
+    * normal distribution of CC monthly returns
     * covariance stationarity
 * Note: we use monthly returns because...
     * they most closely resemble a normal distribution 

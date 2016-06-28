@@ -1,0 +1,170 @@
+
+# Coursera: Intro to Computational Finance: Assignment 9-R: Portfolio Analysis
+
+## Load Data
+
+[http://s3.amazonaws.com/assets.datacamp.com/course/compfin/lab9.RData](http://s3.amazonaws.com/assets.datacamp.com/course/compfin/lab9.RData)
+
+Copied locally (binary file): [../lab9.RData](lab9.RData)
+
+```{r}
+
+    library("zoo")
+
+    # defines returns_df in the workspace
+    load("lab9.RData")
+    
+    str(returns_df)
+
+    rbind(head(returns_df),
+          tail(returns_df))
+
+
+    mu.vec <- apply(returns_df, 2, mean)
+    sigma.vec <- apply(returns_df, 2, sd)
+    Sigma.mat <- cov(returns_df)
+    Rho.mat <- cor(returns_df)
+
+    returns_df.mat <- coredata(returns_df)
+
+    pairs(returns_df.mat,
+          col="blue",
+          pch=16)
+
+    rbind(mu.vec, sigma.vec)
+
+    rbind(Sigma.mat,Rho.mat)
+
+
+```
+
+
+### Question 1  Which two assets have the highest correlation?
+
+```{r}
+
+    Rho.mat
+
+```
+
+
+### Question 2  What is the weight of Microsoft in the global minimum variance portfolio?
+
+```{r}
+
+    source("../my.portfolio.r")
+    
+    gmv.portfolio.weights = gmvPortfolio(mu.vec, Sigma.mat)
+    gmv.portfolio.weights
+
+```
+
+### Question 3  What is the standard deviation of the global minimum variance portfolio?
+
+```{r}
+
+    gmv.portfolio.mu = t(gmv.portfolio.weights) %*% mu.vec
+    gmv.portfolio.sigma =  sqrt( t(gmv.portfolio.weights) %*% Sigma.mat %*% gmv.portfolio.weights )
+
+    c("mu"=gmv.portfolio.mu, "sigma"=gmv.portfolio.sigma)
+
+
+```
+
+### Question 4  What is the expected return of the global minimum variance portfolio?
+
+
+```{r}
+
+    c("mu"=gmv.portfolio.mu, "sigma"=gmv.portfolio.sigma)
+
+```
+
+### Question 5  What happens to the global minimum variance portfolio if short sales are restricted?
+
+```{r}
+
+    gmv.ns.portfolio.weights <- gmvPortfolio.noShort(mu.vec, Sigma.mat)
+
+    rbind( gmv.portfolio.weights, gmv.ns.portfolio.weights)
+
+```
+
+### Question 6  Compute Efficient Portfolio with Target Return Equal to the MAX Individual Asset Return:
+
+Of the four stocks, determine the stock with the largest estimated expected return. 
+Use this maximum average return as the target return for the computation of an
+efficient portfolio allowing for short-sales. 
+
+What is the weight of Microsoft in this portfolio?
+
+```{r}
+
+    eff.portfolio.weights <- effPortfolio(mu.vec, Sigma.mat, max(mu.vec))
+    eff.portfolio.weights 
+
+```
+
+### Question 7  Compute Efficient Portfolio - NO SHORTING - with Target Return Equal to the MAX Individual Asset Return:
+
+
+Of the four stocks, determine the stock with the largest estimated expected return. 
+Use this maximum average return as the target return for the computation of an
+efficient portfolio not allowing for short-sales. What is the weight of
+Microsoft in this portfolio?
+
+
+```{r}
+
+    eff.ns.portfolio.weights <- effPortfolio.noShort(mu.vec, Sigma.mat, max(mu.vec))
+    eff.ns.portfolio.weights 
+
+```
+
+
+### Question 8 Convex combinations of efficient portfolios:
+
+Using the fact that all efficient portfolios can be written as a convex
+combination of two efficient portfolios, compute efficient portfolios as convex
+combinations of the global minimum variance portfolio and the efficient
+portfolio that was computed in question six. 
+
+What is the expected return of the portfolio when α=.5?
+
+```{r}
+
+    alpha.vec=seq(0,1,by=0.1)
+    eff.frontier.weights <- effFrontier(mu.vec, 
+                                        Sigma.mat,
+                                        alpha.vec=alpha.vec,
+                                        gmv.portfolio.weights=gmv.portfolio.weights,
+                                        eff.portfolio.weights=eff.portfolio.weights)
+    cbind(alpha.vec, eff.frontier.weights)
+
+    eff.frontier.5.weights <- eff.frontier.weights[6,]
+    eff.frontier.5.mu <- eff.frontier.5.weights %*% mu.vec
+    eff.frontier.5.mu
+
+
+```
+
+### Question 9  What is the weight of Microsoft in the tangency portfolio with short sales allowed?
+
+
+```{r}
+    
+    rf <- 0.005
+    tan.portfolio.weights <- tanPortfolio(mu.vec, Sigma.mat, rf)
+    tan.portfolio.weights
+
+
+```
+
+### Question 10  What is the weight of Microsoft in the tangency portfolio with short sales not allowed?
+
+```{r}
+
+    tan.ns.portfolio.weights <- tanPortfolio.noShort(mu.vec, Sigma.mat, rf)
+    tan.ns.portfolio.weights
+
+```
