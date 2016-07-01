@@ -1,9 +1,17 @@
 
 # Coursera: Intro to Computational Finance: Week 4: Matrix Review and Time Series Concepts
 
+* [Matrix Review: Portfolio Math](#mrpm)
+* [MultiVariate Normal Distribution](#mvnd)
+* [Time Series Concepts](#tsc)
+* [Auto-correlation and Auto-covariance](#acaac)
+* [White Noise Process](#wnp)
+* [Non-Stationary Processes](#nsp)
+* [Moving Average Processes](#map)
+* [Auto-Regressive Processes](#arp)
 
 
-## Matrix Review: Portfolio Math
+## <a name="mrpm"></a>Matrix Review: Portfolio Math
 
 
     R_p = x1*R1 + x2*R2 + x3*R3 ....
@@ -71,12 +79,12 @@
 
     cov(R_p,x, R_p,y) = x' * Sigma * y
                     
-                      = y' * Sigma * y
+                      = y' * Sigma * x
 
     Note that R_p is a random variable: linear combo of individual asset returns
 
 
-## MultiVariate Normal Distribution
+## <a name="mvnd"></a>MultiVariate Normal Distribution
 
 
 * The PDF of the BiVariate Normal Distribution...
@@ -114,7 +122,7 @@ The BiVariate Normal Distribution PDF becomes:
     (x - mu)' * Sigma^-1 * (x - mu)     # quadratic form: vector-matrix' * square-matrix * vector-matrix
                                         # formula for an ellipse
 
-## Time Series Concepts
+## <a name="tsc"></a>Time Series Concepts
 
 * Time Series Process 
     * Stochastic (random) process
@@ -132,8 +140,11 @@ The BiVariate Normal Distribution PDF becomes:
     { y1, y2, ... y_T } = {y_t}_t=1..T
 
 
-* **Stationary processes**
+### Stationary processes
+
 * {Yt} is stationary if ALL aspects of behavior are UNCHANGED by shifts in time
+    * Y may have correlation across time
+    * but all Y has the exact same correlation across all time
 * A stochastic process is **strictly stationary** if..
     * for any given finite r
     * and any set of subscripts t1, t2 ... tr
@@ -147,7 +158,7 @@ The BiVariate Normal Distribution PDF becomes:
         * is also strictly stationary
 
 
-## Auto-correlation and Auto-covariance
+## <a name="accac"></a>Auto-correlation and Auto-covariance
 
 Covariance (Weakly) Stationary Processes: {Yt}
 
@@ -183,7 +194,7 @@ Covariance (Weakly) Stationary Processes: {Yt}
 
 
 
-## White Noise Process
+## <a name="wnp"></a>White Noise Process
 
 * **Gaussian White Noise**, {Yt}
     * represents random draws from N(0, sigma^2)
@@ -218,7 +229,7 @@ Covariance (Weakly) Stationary Processes: {Yt}
         * however the square of the return data tends to be correlated !
 
 
-## Non-Stationary Processes
+## <a name="nsp"></a>Non-Stationary Processes
 
 
 * Stationary: common structure over time
@@ -288,7 +299,7 @@ De-trending:
     delta_Yt = Yt - Yt-1 = e_t
 
 
-## Moving Average Processes
+## <a name="map"></a>Moving Average Processes
 
 * MA Process
 * Yt is correlated with Yt-1
@@ -345,7 +356,10 @@ De-trending:
                        theta * e_t-1^2 +
                        theta^2 * e_t-1 * e_t-2 ]
 
-                  = E[ e_t * e_t-1 ] + theta * E[ e_t * e_t-2 ] + theta * E[e_t-1^2] + theta^2 * E[e_t-1 * e_t-2]
+                  = E[ e_t * e_t-1 ] + 
+                    theta * E[ e_t * e_t-2 ] + 
+                    theta * E[e_t-1^2] + 
+                    theta^2 * E[e_t-1 * e_t-2]
 
                      Cov(e_t, e_t-1) = E[e_t * e_t-1] - E[e_t] * E[e_t-1]
 
@@ -357,7 +371,10 @@ De-trending:
 
                   = 0 + theta * 0 + theta * Var(e_t-1) + theta^2 * 0
 
-    Cov(Yt, Yt-1) = theta * sigma_e^2 = gamma_1
+    Cov(Yt, Yt-1) = theta * sigma_e^2 
+    
+                  = gamma_1
+
 
              gamma_1      theta * sigma_e^2
     rho_1 = ---------  = -------------------------
@@ -378,7 +395,9 @@ De-trending:
 
 
     
-    gamma_2 = 2-period time covariance = Cov(Yt, Yt-2) = 0
+    gamma_2 = 2-period time covariance 
+    
+            = Cov(Yt, Yt-2) 
 
             = E[ (Yt - mu) * (Yt-2 - mu) ]
 
@@ -415,7 +434,7 @@ De-trending:
     * by the way we've structured the data (overlapping)
 
 
-## Auto-Regressive Processes
+## <a name="arp"></a>Auto-Regressive Processes
 
     AR(1) Model (mean-adjusted form)
 
@@ -454,19 +473,33 @@ De-trending:
 
 
 
-Properties of AR(1) model:
+#### Properties of AR(1) model:
 
     E[Yt] = mu
     
-    Var(Yt) = sigma^2 = sigma_e^2 / (1 - phi^2)
+    Var(Yt) = sigma^2 
 
-    Cov(Yt, Yt-1) = gamma_1 = sigma^2 * phi
+            = sigma_e^2 / (1 - phi^2)
 
-    Corr(Yt, Yt-1) = rho_1 = gamma_1 / sigma^2 = phi
+    Cov(Yt, Yt-1) = gamma_1 
+                
+                  = sigma^2 * phi
 
-    Cov(Yt, Yt-j) = gamma_j = sigma^2 * phi^j
+    Cor(Yt, Yt-1) = rho_1 
+    
+                  = gamma_1 / sigma^2 
+                  
+                  = phi
 
-    Corr(Yt, Yt-j) = rho_j = gamma_j / sigma^2 = phi^j
+    Cov(Yt, Yt-j) = gamma_j 
+    
+                  = sigma^2 * phi^j
+
+    Cor(Yt, Yt-j) = rho_j 
+    
+                  = gamma_j / sigma^2 
+                  
+                  = phi^j
 
     Since -1 < phi < 1,
 

@@ -23,6 +23,15 @@
 * Assumptions
     * normal distribution of CC monthly returns
     * covariance stationarity
+        * mean, var constant over time
+        * "constant expected return" = constant mean
+    * recall (week1): multi-period CC return is equal to sum of single period CC returns
+        * we like ADDITIVE (from week 1)!
+        * sum of two normally distributed random variables...
+            * is ALSO a random variable
+    * recall (week2): simple returns are not suited for normal distribution
+        * because it allows for impossible values
+            * e.g. `R < -1`
 * Note: we use monthly returns because...
     * they most closely resemble a normal distribution 
     * (as opposed to daily returns).
@@ -36,7 +45,8 @@
 
     r_it = cc return on asset i in month t
 
-    i = 1 .. N assets, t=1 .. T months
+    i = 1 .. N assets
+    t = 1 .. T months
 
     r_it ~ N(mu_i, sigma_i^2), for all i and t
 
@@ -64,14 +74,17 @@
 
     r_it = mu_i + e_it
 
-    e_it ~ iid N(0, sigma_i^2)
+    e_it ~ iid N(0, sigma_i^2)      
 
-    cov(e_it, e_jt) = sigma_ij
+    cov(e_it, e_jt) = sigma_ij      : covariance between assets
 
-    cor(e_it, e_jt) = rho_ij
+    cor(e_it, e_jt) = rho_ij        
 
     # errors are NOT correlated over time
-    cov(e_it, e_js) = 0, for t != s, for all i,j
+    cov(e_it, e_js) = 0             : for t != s, for all i,j
+    cov(e_it, e_is) = 0             : an asset's errors are NOT correlated over time
+
+
     
 * Interpretation of `e_it`:
     * random news
@@ -91,7 +104,7 @@
     Bad news,   e_it < 0,   r_it < mu_it
 
 
-### CER Regression MOdel with Standardized News Shocks
+### CER Regression Model with Standardized News Shocks
 
     r_it = mu_i + e_it
 
@@ -99,7 +112,9 @@
 
     z_it ~ iid N(0,1)
 
-    cov(z_it, z_jt) = cor(z_it, z_jt) = rho_ij
+    cov(z_it, z_jt) = cor(z_it, z_jt) 
+    
+                    = rho_ij
 
     cov(z_it, z_js) = 0     # uncorrelated over time
 
@@ -145,6 +160,7 @@
 * Use random number generator
     * to create simulated values
     * for a model
+    * values pulled from a random variable distribution
 * Run many simulations
     * to find the "typical" behavior
 * Useful for:
@@ -212,7 +228,9 @@ Example: simulate monthly returns on MSFT from CER Model
 
 .
 
-    r_t = ln(Pt/Pt-1) = ln(Pt) - ln(Pt-1)
+    r_t = ln(Pt/Pt-1) 
+
+        = ln(Pt) - ln(Pt-1)
 
     ln(Pt) = ln(Pt-1) + r_t
 
@@ -245,6 +263,7 @@ Example: simulate monthly returns on MSFT from CER Model
     # Plot: plot1 + plot2
 
 * Note: prices are non-stationary
+    * Pt+1 depends on Pt
 * returns are stationary
 * random-walk variance increases over time
     * `var( SUM_s=1..t e_s ) = sum of variances`

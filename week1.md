@@ -1,20 +1,28 @@
 
-
-# Coursera: Intro to Computational Finance and Financial Econometrics
-
-Course page: [https://class.coursera.org/compfinance-009](https://class.coursera.org/compfinance-009)  
-Eric Zivot   
-
-
 # Coursera: Intro to Computational Finance and Financial Econometrics: Week 1: Asset Return Calculations
 
 
-## Time Value of Money
+* [Time Value of Money](#tvom)
+* [Asset Return Calculations](#arc)
+* [Portfolio Returns](#pr)
+* [Adjusting for Dividends](#afd)
+* [Adjusting for Inflation ](#afi)
+* [Annualizing Returns](#ar)
+* [Continuously Compounded Returns](#ccr)
+* [Natural Logs and Exponentials](#nlae)
+* [Continously Compounded Portfolio Returns ](#ccpr)
+* [Continously Compunded Return, Adjusting for Inflation](#ccrafi)
+* [Growth of $1 Graphs](#go1g)
+
+
+
+## <a name="tvom"></a>Time Value of Money
 
 
 Future Value: (compounding annually)
     
     FV_1 = PV * (1 + r)
+
     FV_2 = PV * (1 + r) * (1 + r)
 
     FV_n = PV * (1 + r)^n
@@ -36,10 +44,14 @@ Investment Horizon:
 
     E.g: how long does it take for my money to double?
 
+    Note: ln(a^b) = b * ln(a)
+
     2 * PV = PV * (1 + r)^n
 
     n = ln(2PV/PV) / ln(1+r)
+
       = ln(2) / ln(1+r) 
+
       ~ 0.7 / r                 (if r is small)
 
 
@@ -51,6 +63,7 @@ Compounding m times per year:
 Compounding continuously:
 
     FV = lim_m->inf PV * (1 + r/m)^m*n
+
        = PV * e^(r*n)
 
 
@@ -69,7 +82,7 @@ Effective Annual Rate, Continuous Compounding:
 
 
 
-## Asset Return Calculations
+## <a name="arc"></a>Asset Return Calculations
 
 
 Holding period return:
@@ -103,12 +116,27 @@ Simple Returns:
                P_t-1
 
 
+    or,
+
+    P_t-1 * (1 + R_t) = P_t
+
+
 Multi-period returns: Simple two-month return
 
 
                   P_t 
     1 + R_t(2) = ------
                  P_t-2
+
+
+    or,
+
+    P_t-2 * (1 + R_t(2)) = P_t
+
+    P_t-2 * (1 + R_t-1) * (1 + R_t) = P_t
+
+
+    1 + R_t(2) = (1 + R_t-1) * (1 + R_t)
 
 
 
@@ -132,7 +160,12 @@ Multi-period returns: Relationship of two-month return to one-month returns
 
     R_t(2) = R_t + R_t-1 + R_t * R_t-1
 
-           = R_t + R_t-1   (if R_t and R_t-1 are small)
+           ~= R_t + R_t-1   (if R_t and R_t-1 are small)
+
+           WE LIKE (approximaately) ADDITIVE!!
+
+           sum of two normally distributed random variables
+           is also a random variable.
 
 
 
@@ -165,7 +198,7 @@ Multi-period returns: per-period compounded return over k periods:
 
 
 
-## Portfolio Returns
+## <a name="pr"></a>Portfolio Returns
 
 
 Simple Portfolio Return (`R_p`) is the weighted average of individual asset returns.
@@ -176,7 +209,7 @@ Simple Portfolio Return (`R_p`) is the weighted average of individual asset retu
         = SUM_i=1..n [ w_i * R_i ]
 
 
-## Adjusting for Dividends
+## <a name="afd"></a>Adjusting for Dividends
 
 
     D_t = dividend payment between months t-1 and t
@@ -200,15 +233,16 @@ Simple Portfolio Return (`R_p`) is the weighted average of individual asset retu
 
 
 
-## Adjusting for Inflation 
+## <a name="afi"></a>Adjusting for Inflation 
                    
 * REAL rate of return
 * vs. NOMINAL rate of return
-* deflate NOMINAL price P_t 
+* deflate NOMINAL price `P_t`
     * by an index of the general price level
-    * CPI_t
+    * `CPI_t`
 
 .
+
                  P_t
     real.P_t = -------
                 CPI_t
@@ -223,11 +257,13 @@ Simple Portfolio Return (`R_p`) is the weighted average of individual asset retu
                  P_t-1        CPI_t
 
 
-Or, define inflation as:
+Or, define inflation, `pi`, as:
 
              CPI_t - CPI_t-1
     pi_t = --------------------
                  CPI_t-1
+
+         = inflation rate in time period t
 
                 1 + R_t
     real.R_t = ----------  - 1
@@ -238,7 +274,7 @@ Or, define inflation as:
 
 
 
-## Annualizing Returns
+## <a name="ar"></a>Annualizing Returns
 
 
 Example: **assume** same monthly return, `R_m`, for 12 months:
@@ -259,17 +295,30 @@ Annualized return over k years:
 
 
                   [    P_t    ]^(1/k)
-          R_t   = [ --------- ]       - 1
+     1 +  R_t   = [ --------- ]       
                   [   P_t-k   ]
 
 
 
-## Continuously Compounded Returns
+## <a name="ccr"></a>Continuously Compounded Returns
 
 
     R_t = simple return
     r_t = continuously compounded return
     r_t is always smaller than R_t
+
+
+    Recall:
+        FV = PV * e^(r_t * n)
+
+        PV * e^(r_t * n) = PV * (1 + R_t)^n
+
+        (cc return)  = (equivalent compounded simple return)
+
+        e^(r_t * n) = (1 + R_t)^n
+
+        e^r_t       =  1 + R_t
+
 
     r_t = ln(1 + R_t) 
         
@@ -278,7 +327,7 @@ Annualized return over k years:
         ~= R_t  (if R_t is small)
 
 
-    R_t = e^r*t - 1
+    R_t = e^r_t - 1
 
 
     e^(r_t) = e^(ln(1+R_t))
@@ -301,7 +350,7 @@ Annualized return over k years:
 * slope is equal to the growth rate
 
 
-Multi-period continuously compounded return:
+#### Multi-period continuously compounded return:
 
     r_t(2) = continuously compounded growth rate between t-2 and t
 
@@ -316,7 +365,7 @@ Multi-period continuously compounded return:
     P_t-2 * e^(r_t(2)) = P_t
 
 
-Multi-period cc return, relationship to 1-period cc return:
+#### Multi-period cc return, relationship to 1-period cc return:
 
                  P_t     P_t-1
     r_t(2) = ln( ----  * ------ )
@@ -337,7 +386,7 @@ Multi-period cc return, relationship to 1-period cc return:
            NOT TRUE under multiplication.
 
 
-Mult-period cc returns over k periods: General case:
+#### Mult-period cc returns over k periods: General case:
 
 
     r_t(k) = ln(1 + R_t(k))
@@ -350,18 +399,19 @@ Mult-period cc returns over k periods: General case:
 
 
 
-## Natural Logs and Exponentials
+## <a name="nlae"></a>Natural Logs and Exponentials
 
 
-    ln(0) = -inf
-    ln(1) = 0
+    ln(a) = b       : e^b = a
+    ln(0) = -inf    : e^-inf = 0
+    ln(1) = 0       : e^0 = 1
 
-    e^-inf = 0
-    e^0 = 1
-    e^1 = 2.7183
+    e^1 = 2.71828...
 
-    ln(e^x) = x
-    e^ln(x) = x
+    ln(e) = 1       : e^1 = e
+    ln(e^x) = x     : e^x = e^x
+    e^ln(x) = x     : e raised to the-value-you-raise-e-to-in-order-to-get-x, equals x
+
 
     d.ln(x)/dx = 1/x
     d.e^x/dx = e^x
@@ -369,7 +419,8 @@ Mult-period cc returns over k periods: General case:
     ln(x*y) = ln(x) + ln(y)
     ln(x/y) = ln(x) - ln(y)
 
-    ln(x^y) = y * ln(x)
+    ln(x^y) = y * ln(x)     : e^(y*ln(x)) = x^y
+                            : e^(a*b) = (e^a)^b = (e^b)^a
     
     e^x * e^y = e^(x+y)
     e^x * e^-y = e^(x-y)
@@ -378,7 +429,7 @@ Mult-period cc returns over k periods: General case:
 
 
 
-## Continously Compounded Portfolio Returns 
+## <a name="ccpr"></a>Continously Compounded Portfolio Returns 
 
 
     R_p = w1 * r1 + w2 * r2 + ... 
@@ -387,14 +438,15 @@ Mult-period cc returns over k periods: General case:
 
         = ln(1 + w1 * r1 + w2 * r2 + ... )
 
-    Portfolio returns are NOT additive.
+    CC Portfolio returns are NOT additive.
+    Simple Portfolio returns ARE additive.
 
     r_p ~= R_p   (if R_p is small)
 
     R_p > r_p    (if R_p is big)
 
 
-## Continously Compunded Return, Adjusting for Inflation
+## <a name="ccrafi"></a>Continously Compunded Return, Adjusting for Inflation
 
 
     
@@ -422,7 +474,7 @@ Mult-period cc returns over k periods: General case:
 
 
 
-## Growth of $1 Graphs
+## <a name="go1g"></a>Growth of $1 Graphs
 
 * the thing about returns is...
     * if you lose 50% in one period
@@ -432,7 +484,7 @@ Mult-period cc returns over k periods: General case:
     * people often use "Growth of $1" graphs
 * given a series of daily (or monthly) returns
 * compute the performance of $1 invest
-    * after period 1: (1 + R_1)
-    * after period 2: (1 + R_1) * (1 + R_2)
+    * after period 1: `(1 + R_1)`
+    * after period 2: `(1 + R_1) * (1 + R_2)`
     * ...
-    * after period n: (1 + R_1) * (1 + R_2) * ... * (1 + R_n)
+    * after period n: `(1 + R_1) * (1 + R_2) * ... * (1 + R_n)`

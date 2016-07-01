@@ -105,6 +105,8 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 
 ### [Assignment 5-R: Analyzing Monthly Returns in R](assignment5-R/assignment5-R.md)
 
+## [Mid-Term Exam](exam1.md)
+
 
 ## [Week 6: Constant Expected Return Model](week6.md)
 
@@ -184,4 +186,26 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 #### Rolling Efficient Portfolios Over Time
 
 ### [Assignment 9-R: More Portfolio Analysis in R](assignment9-R/assignment9-R.md)
+
+
+## [Week 10: Portfolio Risk Budgeting, Single Index Model](week10.md)
+
+#### Portfolio Risk Budgeting
+#### Risk Decomposition using Euler's Theorem
+#### Marginal Contribution to Risk (MCR)
+#### Beta
+#### Sharpe Single Index Model
+#### Statistical Properties of SI Model (Unconditional)
+#### Statistical Properties of SI Model (Conditional on `R_Mt = r_Mt`)
+#### Decomposition of Total Variance
+#### SI Model and Portfolios
+#### Estimating the SI Model
+#### Least Squares Estimates
+#### SI Model Using Matrix Algebra
+#### SI Model for 4 Asset Portfolio
+#### Estimating SI Model Covariance Matrix
+#### Hypothesis Testing in SI Model
+
+
+## [Final Exam](exam2.md)
 

@@ -32,6 +32,11 @@ Investment in two Risky Assets
 * CER Model, however, applies to CC returns
     * NOT simple returns
     * so we assume CER model applies to simple returns as well
+    * CC returns are ADDITIVE
+        * sum of two normally distributed random variables...
+            * is ALSO random variable
+    * Simple returns are approximately ADDITIVE 
+        * when R is small
 
 #### Assumptions:
 

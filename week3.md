@@ -1,7 +1,18 @@
 
 # Coursera: Intro to Computational Finance and Financial Econometrics: Week 3: Probability Review Continued
 
-## Location Scale Model
+* [Location Scale Model](#lsm)
+* [BiVariate Probability Distribution](#bvpd)
+* [Conditional probability](#cp)
+* [BiVariate Continuous Distributions](#bvcd)
+* [Covariance and Correlation](#cac)
+* [General BiVariate Normal Distribution](#gbvnd)
+* [Linear Combination of Two Random Variables](#lcotrv)
+* [Example: Portfolio Analysis](#epa)
+* [Example: Multi-period continously compounded returns](#empccr)
+
+
+## <a name="lsm"></a>Location Scale Model
 
 * For converting from standardized RV to non-standardized RV
 * location = mu
@@ -38,7 +49,7 @@ Example: Review **Value-at-Risk**:
     q(R)_alpha = mu + sigma * Z_alpha 
 
 
-## BiVariate Probability Distribution
+## <a name="bvpd"></a>BiVariate Probability Distribution
 
 
 * Joint probability distribution
@@ -56,7 +67,7 @@ Example: Review **Value-at-Risk**:
     P(Y = y1) = SUM_all-x p(x,y1)
 
 
-### Conditional probability
+### <a name="cp"></a>Conditional probability
 
 * If we know Y, what does this tell us about X?
 * If X and Y are INDEPENDENT...
@@ -110,7 +121,7 @@ Example:
            = p(x)
                 
 
-## BiVariate Continuous Distributions
+## <a name="bvcd"></a>BiVariate Continuous Distributions
 
 
 * The joint pdf of X and Y...
@@ -176,7 +187,7 @@ R:
     pmvnorm(lower=c(-1,-1), upper=c(1,1))
 
 
-## Covariance and Correlation
+## <a name="cac"></a>Covariance and Correlation
 
 
 * **Covariance**: measures direction
@@ -262,7 +273,7 @@ Noteworthy properties of correlation:
     * and uses the rank in the correlation computation
 
 
-### General BiVariate Normal Distribution
+### <a name="gbvnd"></a>General BiVariate Normal Distribution
 
 * Big long equation
 * depends on 5 parms:
@@ -279,7 +290,7 @@ Noteworthy properties of correlation:
     * `rho_xy = 1` is a 2-d distribution
 
 
-## Linear Combination of Two Random Variables
+## <a name="lcotrv"></a>Linear Combination of Two Random Variables
 
 
 * Define new random variable Z
@@ -349,7 +360,7 @@ Normality:
 
    
 
-## Example: Portfolio Analysis
+## <a name="epa"></a>Example: Portfolio Analysis
 
 
     R_a = return on asset A
@@ -412,7 +423,7 @@ More later...
 
 
 
-## Example: Multi-period continously compounded returns
+## <a name="empccr"></a>Example: Multi-period continously compounded returns
 
 * CC monthly returns
 * normally distributed
@@ -421,7 +432,7 @@ More later...
 
 .
 
-    r = ln(1 + R) = montly CC return
+    r = ln(1 + R) = monthly CC return
 
     r_t ~ N(mu, sigma^2) for all t
 
@@ -432,7 +443,7 @@ Annual return:
 
     r_t(12) = SUM_j=0..11 r_t-j
 
-           = r_t + r_t-1 + ... + r_t-11
+           = r_t + r_t-1 + ... + r_t-11      # CC returns are additive
 
            = linear combination of UN-correlated monthly returns
 

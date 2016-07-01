@@ -1,28 +1,41 @@
 
 # Coursera: Intro to Computational Finance and Financial Econometrics: Week 2: Probability Review
 
+* [Univariate Random Variables](#urv)
+* [Discrete Random Variables](#drv)
+* [Continuous Random Variable](#crv)
+* [Cumulative Distribution Function (CDF)](#cdf)
+* [Quantiles of a Distrubution](#qoad)
+* [Standard Normal Distribution](#snd)
+* [Expected Value, Variance, Skewness, Kurtosis](#evvsk)
+* [General Normal Distribution](#gnd)
+* [The Log-Normal Distribution](#lnd)
+* [Student's t distribution](#std)
+* [Linear Functions of Random Variables](#lforv)
+* [Value at Risk](#var)
 
-## Univariate Random Variables
 
-* A random variable X can take on a given set of values
-    * "set of values" = Sample Space, S_x
+## <a name="urv"></a>Univariate Random Variables
+
+* A random variable X can take on one of a given set of values
+    * "set of values" = Sample Space, `S_x`
 * where the likelihood of of X being any given value
-    * in the sample space, S_x
+    * in the sample space, `S_x`
     * is determined by the random variable's probability distribution function
 * Future Price of a stock (e.g. 1 month from now)...
     * is a random variable
     * we're trying to predict what the future price will be
 * Example, MSFT:
     * X = price of MSFT in one month
-        * S_x = { R: 0 < X <= M }
+        * `S_x = { R: 0 < X <= M }`
         * M is some large number
     * X = simple return on a one month investment
-        * S_x = { R: -1 <= X < M }
+        * `S_x = { R: -1 <= X < M }`
         * M is some large number
     * X = 1 if price goes up; X = 0 if price goes down
-        * S_x = {0,1}
+        * `S_x = {0,1}`
 
-### Discrete Random Variables
+### <a name="drv"></a>Discrete Random Variables
 
 * can take on a finite number of n different values
     * x1, x2, x3, ... xn
@@ -32,10 +45,10 @@
 
 PDF must satisfy:
 
-1. p(x) >= 0 for all x E S_x; 
-    * p(x) = 0 for all x !E S_x
-2. SUM_x E S_x [ p(x) ] = 1
-3. p(x) <= 1 for all x E S_x
+    1. p(x) >= 0 for all x E S_x; 
+        * p(x) = 0 for all x !E S_x
+    2. SUM_x E S_x [ p(x) ] = 1
+    3. p(x) <= 1 for all x E S_x
 
 
 ### Bernouli Distribution
@@ -48,18 +61,18 @@ PDF must satisfy:
     * x = {0,1}
 
 
-### Continuous Random Variable
+### <a name="crv"></a>Continuous Random Variable
 
 * can take on any real value
 * pdf = f(x) such that
-    * Pr(X E A) = integral_A [ f(x) * dx ]
+    * `Pr(X E A) = integral_A [ f(x) * dx ]`
     * Pr(X E A) = "probability X is in the range A"
     * Pr(X E A) = "area under the probability curve over interval A"
 
 PDF must satisfy:
 
-1. f(x) >= 0
-2. integral_INF [ f(x) * dx ] = 1
+    1. f(x) >= 0
+    2. integral_INF [ f(x) * dx ] = 1
 
 
 ### Uniform Distribution
@@ -78,9 +91,9 @@ PDF must satisfy:
 
 
 
-## Cumulative Distribution Function (CDF)
+## <a name="cdf"></a>Cumulative Distribution Function (CDF)
 
-CDF = F(x) = Pr(X <= x)
+    CDF = F(x) = Pr(X <= x)
 
 Features of the CDF:
 
@@ -92,8 +105,8 @@ Features of the CDF:
     * if X is continuous
 * Continuously increasing function
     * the derivative is never negative
-* CDF is a plot of probability (y-axis) vs S_x (x-axis)
-    * y-axis is P(X <= x), where x E S_x
+* CDF is a plot of probability (y-axis) vs `S_x` (x-axis)
+    * y-axis is P(X <= x), where x E `S_x`
 
 Note: For a continuous RV:
 
@@ -102,32 +115,35 @@ Note: For a continuous RV:
 
 
 
-## Quantiles of a Distrubution
+## <a name="qoad"></a>Quantiles of a Distrubution
 
 * X is a rv with continuous CDF F(x)
 * The alpha * 100% quantile of F(x)...
     * is the value `q_alpha`, such that
     * `F(q_alpha) = alpha = Pr(X <= q_alpha)`
-    * `q_alpha` is the quantile
+    * `q_alpha` is the quantile value of X
     * `q_alpha` E S_x
+    * `alpha` is the quantile percent (e.g 0.05)
 * i.e. the area under the PDF to the left of `q_alpha`
 * if F(x) has an inverse, F^-1(x), then:
     * `q_alpha = F^-1(alpha)`
     * F^-1(x) aka the "quantile function"
-* alhpa = 0.5 = 50% quantile = "median"
+* alpha = 0.5 = 50% quantile = "median"
 
 
 Quantiles are often used in financial analysis to tell us the probability of loss
 
 * X represents rate of return
+    * X = a random variable with some distribution
+    * e.g. normally distributed
 * with 1% probability, how much could we lose?
-    * ANSWER = 0.01 quantile
+    * ANSWER = 0.01 quantile of return distribution
     * which is the rate of return with 1% probability of occurring
         * technically, 1% probability that X <= 0.01 quantile rate of return
 
 
 
-## Standard Normal Distribution
+## <a name="snd"></a>Standard Normal Distribution
 
     
                        1                  1
@@ -140,23 +156,27 @@ Quantiles are often used in financial analysis to tell us the probability of los
     Pr( -3 <= x <= 3 ) ~= 0.99
 
 
-* In finance, monthly returns tend to approximate a normal distribution
+* In finance, monthly CC returns tend to approximate a normal distribution
+    * TODO: monthly simple returns?
 * but not all the time...
     * so we'll be looking at other distributions as well for modeling returns
+    * e.g. Student's t
+        * has fatter tails
+        * which matches observed return distributions
 
 R functions:
 
-* pnorm(x): Pr(X <= x)
-* qnorm(alpha): F^-1(alpha)
-* dnorm(x): PDF(x) 
+    pnorm(x):       Pr(X <= x)
+    qnorm(alpha):   F^-1(alpha)
+    dnorm(x):       PDF(x) 
 
 
-## Expected Value, Variance, Skewness, Kurtosis
+## <a name="evvsk"></a>Expected Value, Variance, Skewness, Kurtosis
 
 * Expected Value: Center of mass
     * probability-weighted avg 
 * Variance and Standard Deviation: dispersion about mean
-    * dispersion of returns = risk
+    * dispersion of returns = volatility = risk
 * Skewness: symmetry about mean
     * some assets may be skewed toward losses (or gains)
     * `Skew(x) > 0` = positive skewness
@@ -180,31 +200,39 @@ R functions:
 
 .
 
-    Discrete: E[X] = mu_x = SUM_Sx [ x * p(x) ]
+    Discrete:   E[X] = mu_x 
+    
+                     = SUM_Sx [ x * p(x) ]
 
     Continuous: E[X] = integral_Sx [ x * pdf(x) ]
 
 
-    Var(X) =  sigma_x^2 = E[ (X - E[X])^2 ]
+    Var(X) =  sigma_x^2 
+    
+           = E[ (X - E[X])^2 ]
 
-                        = E[X^2] = E[X]^2
+           = E[X^2] = E[X]^2
 
+           = "second moment about the mean"
 
 
                     X - mu_x
     Skew(X) = E[ ( ---------- )^3 ]
                     sigma_x
 
+            = "third moment about the mean"
+
 
                         X - mu_x
     Kurtosis(X) = E[ ( ---------- )^4 ]
                         sigma_x
 
+                = "fourth moment about the mean"
 
     
 
 
-## General Normal Distribution
+## <a name="gnd"></a>General Normal Distribution
 
     
                         
@@ -214,7 +242,7 @@ R functions:
 
 
 
-    Quantile:
+Quantile:
     
     q_alpha = mu_x + sigma_x * PHI^-1(alpha) = mu_x + sigma_x * z_alpha
 
@@ -232,32 +260,34 @@ R functions:
     * in fact can take on any value between -INF and +INF
 
 
-## The Log-Normal Distribution
+## <a name="lnd"></a>The Log-Normal Distribution
 
-    X ~ N(mu_x, sigma_x^2), -INF < X < INF
+    X ~ N(mu_x, sigma_x^2),                     -INF < X < INF
 
-    Y = exp(X) ~ lognormal(mu_x, sigma_x^2), 0 < Y < INF
+    Y = exp(X) ~ lognormal(mu_x, sigma_x^2),       0 < Y < INF
 
     E[Y] = exp(mu_x + sigma_x^2/2)
 
-    Var(Y) = exp(2*mu_x + sigma_x^2)( exp(sigma_x^2) - 1 )
+    Var(Y) = exp(2*mu_x + sigma_x^2) * ( exp(sigma_x^2) - 1 )
 
 
 Example: continuously compounded returns
 
     r ~ N(0.05, 0.50^2)
 
+    e^r = 1 + R
+
     1 + R ~ lognormal(0.05, 0.50^2)
 
-R:
+R functions:
 
-* rlnorm
-* plnorm
-* qlnorm
-* dlnorm
+    rlnorm
+    plnorm
+    qlnorm
+    dlnorm
 
 
-## Student's t distribution
+## <a name="std"></a>Student's t distribution
 
 * similar to normal
 * extra parameter: degrees of freedom
@@ -269,25 +299,27 @@ R:
         * kurtosis is large and the tails are thick
     * if df < 4...
         * kurtosis is INF
-* R:
-    * dt
-    * pt
-    * rt
-    * qt
 
+R functions:
 
+    dt
+    pt
+    rt
+    qt
 
-.
 
     df = degrees of freedom
 
-    X ~ t_df
+    X ~ t(df)    : X follows a t-distribution with degrees of freedom = df
+
 
                 gamma(df + 1)                     x^2         df+1
     PDF(x) =  --------------------------- * (1 + ----- )^( - ------ )
                sqrt(df*pi) * gamma(df/2)          df           2
 
-              -INF < x < INF, df > 0
+              -INF < x < INF
+
+              df > 0
 
 
     gamma(z) = integral_0-INF [ t^(z-1) * e^-t * dt ]
@@ -302,7 +334,7 @@ R:
     kurt(X) = 6 / (df-4) - 3,   df > 4
 
 
-## Linear Functions of Random Variables
+## <a name="lforv"></a>Linear Functions of Random Variables
 
 
 * Let X be a random variable
@@ -310,7 +342,7 @@ R:
 
 .
 
-    E[Y] = E[X] * a + b
+    E[Y] = a * E[X] + b
 
     Var(Y) = a^2 * Var(X)
 
@@ -323,30 +355,34 @@ R:
 
 
 
-## Value at Risk
+## <a name="var"></a>Value at Risk
 
 * Value-at-risk: how much money might you lose, with a certain probability?
 * Example: a $10K investement in MSFT, for 1 month
     * R = simple monthly return
     * `R ~ N(0.05, 0.10^2)`
-* Calculate how much we can lost with a specified probability, alpha
+* Calculate how much we can lose with a specified probability, `alpha`
 * based on distribution of asset returns
+    * `q_alpha` is the asset return at quantile `alpha`
 * the probability is associated with...
     * the quantile of the return distribution...
     * at the given probability
-    * so, Value-at-Risk(5% probability) = 5% quantile of the return distribution
+    * so, Value-at-Risk(5% probability) = 5% quantile value of the return distribution
     * which is typically low/negative
-    * multiply the 5% quantile return by the initial investment
+    * multiply the 5% quantile return value by the initial investment
 
 
 
 
-Questions to answer:
+### Questions to answer:
 
 1. What's the probability distribution of end-of-month wealth, W1?
     * W1 = $10K ( 1 + R )
     * Linear function of R...
     * So W1 is also normally-distributed random variable
+        * assuming R is a normally distributed random variable
+        * but simple return R only approximates a normal distribution
+        * when R is small
 2. What is Pr(W1 < 9000)?
 3. What value of R produces W1 = 9000?
 4. What's the monthly value-at-risk (VaR), with 5% probability?
@@ -355,6 +391,8 @@ Questions to answer:
     * Note: people often assume R is normally distributed
     * however, this is not often the case in practice
     * this leads to UNDERestimating the actual VaR
+        * R tends to have thicker tails
+        * i.e. higher probability of extreme values
     * using a t-distribution yields a more accurate estimate
 
 
@@ -418,10 +456,14 @@ Notice that -0.10 is the 6.7% quantile of the distribution of R:
 
 1. compute alpha quantile or normal distribution
     * `q_alpha(r) = mu_r + sigma_r * z_alpha`
-2. convert alpha quantile for r into alpha quantile for R
+2. convert alpha quantile for r (cc return) into alpha quantile for R (simple return)
     * `q_alpha(R) = e^q_alpha(r) - 1`
 3. compute VaR_alpha
     * `VaR_alpha = $W0 * q_alpha(R)`
+    * or, using the cc return:
+        * `r_cc = q_alpha(r)`
+        * `VaR_alpha = $W0 * e^r_cc - $W0`
+        * `VaR_alpha = $W0 * ( e^r_cc - 1)`
 
 .
 

@@ -1,0 +1,162 @@
+
+# Coursera: Intro to Computational Finance: Assignment 10: Sharpe Single Index Model
+
+Note: the course doesn't actually have an assignment 10.  Just playing around with the SI Model.
+
+```{r}
+
+    library(tseries)    # get.hist.quote
+    library(zoo)        # coredata
+    library(quadprog)   # solve.QP
+
+    #
+    # Load price data from yahoo
+    #
+    SBUX_prices <- get.hist.quote(instrument="sbux", 
+                                  start="2001-01-01",
+                                  end="2015-12-31", 
+                                  quote="AdjClose",
+                                  provider="yahoo", 
+                                  origin="1970-01-01",
+                                  compression="m", 
+                                  retclass="zoo", 
+                                  quiet = TRUE)
+    MSFT_prices <- get.hist.quote(instrument="msft", 
+                                  start="2001-01-01",
+                                  end="2015-12-31", 
+                                  quote="AdjClose",
+                                  provider="yahoo", 
+                                  origin="1970-01-01",
+                                  compression="m", 
+                                  retclass="zoo", 
+                                  quiet = TRUE)
+    IBM_prices <-  get.hist.quote(instrument="ibm", 
+                                  start="2001-01-01",
+                                  end="2015-12-31", 
+                                  quote="AdjClose",
+                                  provider="yahoo", 
+                                  origin="1970-01-01",
+                                  compression="m", 
+                                  retclass="zoo", 
+                                  quiet = TRUE)
+    SP500_prices <- get.hist.quote(instrument="^gspc", 
+                                   start="2001-01-01",
+                                   end="2015-12-31", 
+                                   quote="AdjClose",
+                                   provider="yahoo", 
+                                   origin="1970-01-01",
+                                   compression="m", 
+                                   retclass="zoo", 
+                                   quiet = TRUE)
+
+    #
+    # Compute simple returns, means, sd, cov
+    # Portfolio theory assumes simple returns (as opposed to cc returns)
+    # 
+    all_prices <- merge(SP500_prices, IBM_prices, MSFT_prices, SBUX_prices)
+
+    # diff: computes pt1 - pt0
+    # lag: shifts all_prices by k=-1 (so that pt-1 -> pt)
+    simple_returns <- diff(all_prices) / lag(all_prices,k=-1)
+    simple_returns.mat <- coredata(simple_returns)
+
+    asset_names <- c("SP500", "IBM", "MSFT", "SBUX")
+    colnames(simple_returns.mat) <- asset_names
+
+    dim(simple_returns.mat)
+    rbind(head(simple_returns.mat),
+          tail(simple_returns.mat))
+
+    mu.vec <- apply(simple_returns.mat, 2, mean)
+    sigma.vec <- apply(simple_returns.mat, 2, sd)
+
+    rbind(mu.vec, sigma.vec)
+
+```
+
+### 1. Compute SI Model estimates (alpha,beta,`sigma_e,i^2`) for each security from sample statistics, using SP500 as the market index.
+
+#### Review: SI Model:
+
+    R_it = alpha_i + beta_i * R_Mt + err_it
+
+    i = 1..N assets
+    t = 1..T time
+
+    return-for-asset-i-at-time-t = alpha-for-asset-i + 
+                                   beta-for-asset-i * market-return-at-time-t + 
+                                   error-term-for-asset-i-at-time-t
+
+               cov(R_it, R_Mt)
+    ^beta_i = ---------------
+                var(R_Mt)
+
+    ^alpha_i = E[R_i] - beta_i * E[R_Mt]
+        
+             = ^mu_i - beta_i * mu_M
+
+    ^err_it = R_it - ^alpha_i - ^Beta_i * ^mu_M
+
+                    1
+    sigma_e,i^2 = ----- SUM_t=1..T ^err_t^2
+                   T-2
+
+
+#### R:
+
+```{r}
+
+    beta.vec <- apply(simple_returns.mat, 2, function(R_i) { cov(R_i, simple_returns.mat[,"SP500"]) / sigma.vec["SP500"]^2 })   
+
+    alpha.vec <- mu.vec - beta.vec * mu.vec["SP500"]
+
+    simple_returns.df <- as.data.frame(simple_returns.mat)
+    errors.mat <- mapply(function(R_i,alpha_i,beta_i) { R_i - alpha_i - beta_i * simple_returns.df$SP500  }, 
+                         simple_returns.df, 
+                         alpha.vec, 
+                         beta.vec)
+
+    # above mapply is same as:
+    # errors.mat2 <- matrix(0, 
+    #                       nrow=nrow( simple_returns.mat ),
+    #                       ncol=ncol( simple_returns.mat ))
+
+    # colnames(errors.mat2) <- asset_names
+
+    # for (i in seq_along(asset_names)) {
+    #     errors.mat2[,i] = simple_returns.mat[,i] - alpha.vec[i] - beta.vec[i] * simple_returns.mat[,"SP500"]
+    # }
+
+    sigma_e.vec <- apply(errors.mat, 2, sd)
+
+    rbind(alpha.vec,
+          beta.vec,
+          sigma_e.vec)
+
+```
+
+### 1. Compute SI Model estimates (alpha,beta,`sigma_e,i^2`) for each security from linear regression model.
+
+
+```{r}
+
+    linear.models <- mapply( function(R_i) { lm(R_i ~ simple_returns.df$SP500) },
+                             simple_returns.df,
+                             SIMPLIFY=F)
+
+    alpha.lm.vec <- sapply( linear.models, function(lm_i) { coef(lm_i)[1] } )
+    names(alpha.lm.vec) <- asset_names
+
+    beta.lm.vec <- sapply( linear.models, function(lm_i) { coef(lm_i)[2] } )
+    names(beta.lm.vec) <- asset_names
+
+    errors.lm.mat <- sapply( linear.models, function(lm_i) { residuals(lm_i) } )
+    sigma_e.lm.vec <- apply(errors.lm.mat, 2, sd)
+
+    rbind(alpha.lm.vec,
+          beta.lm.vec,
+          sigma_e.lm.vec)
+
+```
+
+

@@ -1,7 +1,24 @@
 
 # Coursera: Intro to Computational Finance: Week 5: Descriptive Statistics
 
-## Covariant Stationarity
+* [Covariant Stationarity](#cs)
+* [Descriptive Sample Statistics](#dss)
+* [Empirical Quantiles/Percentiles](#eqp)
+* [Historical Value-at-Risk](#hvar)
+* [Sample Statistics](#ss)
+* [Empirical CDF](#ecdf)
+* [QQ Plot: Quantile-Quantile Plot](#qqp)
+* [Outliers](#out)
+* [Graphical Measures](#gm)
+* [Four Graph Summary](#fgs)
+* [BiVariate Sample Statistics](#bvss)
+* [Time-Series Descriptive Statistics](#tsds)
+* [Summary of Stylized Facts for Monthly CC Returns](#sosffmccr)
+* [Stylized Facts for DAILY Returns](#sffdr)
+
+
+
+## <a name="cs"></a>Covariant Stationarity
 
 * Looking at asset returns
 * Asset returns are realization of covariant stationary time series
@@ -33,7 +50,7 @@
 Compensation for the higher volatility.  But not always true.
 
 
-## Descriptive Sample Statistics
+## <a name="dss"></a>Descriptive Sample Statistics
 
 * Typically we don't know the model/distribution...
     * of the underlying population data
@@ -96,7 +113,7 @@ Compensation for the higher volatility.  But not always true.
            lwd=2)
 
 
-### Empirical Quantiles/Percentiles
+### <a name="eqp"></a>Empirical Quantiles/Percentiles
 
 * Sample quantiles are known as Empirical Quantiles
 * Quartiles:
@@ -124,7 +141,7 @@ Useful R functions for sample statistics:
     IQR
     summary
 
-### Historical Value-at-Risk
+### <a name="hvar"></a>Historical Value-at-Risk
 
 * uses empirical quantiles from data
     * as opposed to standard normal quantiles
@@ -137,7 +154,7 @@ Useful R functions for sample statistics:
     
 
 
-### Sample Statistics
+### <a name="ss"></a>Sample Statistics
 
 "Plug-in Principle" plug-in sample statistic for underlying population statistic
 
@@ -178,7 +195,7 @@ Useful R functions for sample statistics:
     apply(MSFT.SP500.mat, 2, kurtosis)     
 
 
-## Empirical CDF
+## <a name="ecdf"></a>Empirical CDF
 
 
     Recall: CDF = F(x) = Pr(X <= x)
@@ -204,7 +221,7 @@ Useful R functions for sample statistics:
     # TODO: plot empirical CDF vs normal CDF
 
 
-## QQ Plot: Quantile-Quantile Plot
+## <a name="qqp"></a>QQ Plot: Quantile-Quantile Plot
 
 * QQ Plot
     * Compares empirical quantiles (y-axis) 
@@ -226,7 +243,7 @@ R:
     par(mfrow=c(1,1))
 
 
-## Outliers
+## <a name="out"></a>Outliers
 
 * Outliers can really mess with sample statistics
     * except quantiles, which aren't affected as much
@@ -251,7 +268,7 @@ R:
     ^q_.75 + 3 * IQR = 150% of range higher than 75% quantile
 
 
-## Graphical Measures
+## <a name="gm"></a>Graphical Measures
     
 ### BoxPlots
 
@@ -276,7 +293,7 @@ R:
             ylab="monthly cc return")
 
 
-### Four Graph Summary
+### <a name="fgs"></a>Four Graph Summary
 
 1. histogram of monthly cc returns
 2. boxplot of monthly cc returns
@@ -308,7 +325,7 @@ R:
     par(mfrow=c(1,1))
 
 
-## BiVariate Sample Statistics
+## <a name="bvss"></a>BiVariate Sample Statistics
 
     Sample Covariance = s_xy 
                       = ^sigma_xy 
@@ -338,7 +355,7 @@ R:
     pairs(cbind(gwn,MSFT,SP500))
 
 
-## Time-Series Descriptive Statistics
+## <a name="tsds"></a>Time-Series Descriptive Statistics
 
     Sample Autocovariance = ^gamma_j
                     
@@ -353,7 +370,7 @@ R:
     Sample Autocorrelation Function (SACF): Plot ^rho_j vs j
 
                     
-## Summary of Stylized Facts for Monthly CC Returns
+## <a name="sosffmccr"></a>Summary of Stylized Facts for Monthly CC Returns
 
 * Returns appear to be approximately normally distributed
     * some noticeable negative skewness
@@ -363,7 +380,7 @@ R:
     * no serial correlation
 
 
-## Stylized Facts for DAILY Returns
+## <a name="sffdr"></a>Stylized Facts for DAILY Returns
 
 * Daily returns are NOT normally distributed
     * empirical distributions have fatter tails
