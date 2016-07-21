@@ -206,6 +206,7 @@ UW Certificate Program: [https://www.pce.uw.edu/certificates/computational-finan
 #### Estimating SI Model Covariance Matrix
 #### Hypothesis Testing in SI Model
 
+### [Assignment 10-R: SI Model Analysis in R](assignment10-R/assignment10-R.md)
 
 ## [Final Exam](exam2.md)
 

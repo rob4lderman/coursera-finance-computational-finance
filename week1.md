@@ -35,7 +35,9 @@ Present Value:
 
 Compounded Annual Return:
 
-    r =  ( FV_n / PV )^(1/n) - 1
+    1 + r =  ( FV_n / PV )^(1/n) 
+
+          = n-root( FV_n / PV ) 
 
 
 Investment Horizon:
@@ -57,6 +59,8 @@ Investment Horizon:
 
 Compounding m times per year:
 
+    per-period interest rate = r/m
+
     FV = PV * (1 + r/m)^(m*n)
 
 
@@ -69,14 +73,21 @@ Compounding continuously:
 
 Effective Annual Rate:
 
-    PV * (1 + r/m)^m*n = PV * (1 + R)^n
+    PV * (1 + r/m)^m*n  =  PV * (1 + R)^n
 
-    R = (1 + r/m)^m - 1
+    (1 + r/m)^m  =  (1 + R)
+
+    R  =  (1 + r/m)^m - 1
 
 
-Effective Annual Rate, Continuous Compounding:
+Effective Annual Rate, Continuous Compounding over n periods:
 
-    PV * e^r*n = PV * (1 + R)^n
+    R = per-period compounded rate
+    r = continuously compounded rate
+
+    PV * (1 + R)^n  =  PV * e^r*n 
+
+    (1 + R)  =  e^r  
 
     R = e^r - 1
 
@@ -303,7 +314,7 @@ Annualized return over k years:
 ## <a name="ccr"></a>Continuously Compounded Returns
 
 
-    R_t = simple return
+    R_t = simple return (per-period compounded rate)
     r_t = continuously compounded return
     r_t is always smaller than R_t
 
@@ -313,7 +324,7 @@ Annualized return over k years:
 
         PV * e^(r_t * n) = PV * (1 + R_t)^n
 
-        (cc return)  = (equivalent compounded simple return)
+        (cc return)  = (equivalent per-period compounded simple return)
 
         e^(r_t * n) = (1 + R_t)^n
 

@@ -2,15 +2,15 @@
 # Functions for Portfolio Analysis 
 #
 #
-# gmvPortfolio( mu.vec, Sigma.mat )
-# tanPortfolio( mu.vec, Sigma.mat, risk.free.rate )
-# effPortfolio( mu.vec, Sigma.mat, target.return )
-# effFrontier(mu.vec, Sigma.mat, alpha.vec=seq(from=-1,to=2,by=0.1), gmv.portfolio.weights=NULL, eff.portfolio.weights=NULL) 
+# gmv.weights.vec <- gmvPortfolio( mu.vec, Sigma.mat )
+# tan.weights.vec <- tanPortfolio( mu.vec, Sigma.mat, risk.free.rate )
+# eff.weights.vec <- effPortfolio( mu.vec, Sigma.mat, target.return )
+# eff.weights.mat <- effFrontier(mu.vec, Sigma.mat, alpha.vec=seq(from=-1,to=2,by=0.1), gmv.portfolio.weights=NULL, eff.portfolio.weights=NULL) 
 #
-# gmvPortfolio.noShort( mu.vec, Sigma.mat )
-# tanPortfolio.noShort( mu.vec, Sigma.mat, risk.free.rate )
-# effPortfolio.noShort( mu.vec, Sigma.mat, target.return )
-# effFrontier.noShort(mu.vec, Sigma.mat, alpha.vec=seq(from=-1,to=2,by=0.1), gmv.portfolio.weights=NULL, eff.portfolio.weights=NULL) 
+# gmv.weights.vec <- gmvPortfolio.noShort( mu.vec, Sigma.mat )
+# tan.weights.vec <- tanPortfolio.noShort( mu.vec, Sigma.mat, risk.free.rate )
+# eff.weights.vec <- effPortfolio.noShort( mu.vec, Sigma.mat, target.return )
+# eff.weights.mat <- effFrontier.noShort(mu.vec, Sigma.mat, target.return.vec )
 #
 # portfolioWeightsBarplot(x.mat, ...)
 #
@@ -478,6 +478,12 @@ my.portfolio.test <- function() {
              labels=asset_names[i], 
              pos=4)
     }
+    # ..OR..:
+    #
+    # text(x=sigma.vec,
+    #      y=mu.vec,
+    #      labels=names(sigma.vec),
+    #      pos=4)
 
     #
     # Compute global min var portfolio and plot it.
