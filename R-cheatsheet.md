@@ -6,8 +6,21 @@
 Main website: [http://cran.r-project.org/](http://cran.r-project.org/)
 
 
+* [Basics](#basics)
+* [Vectors and Matrices and Data Frames](#vectors)
+* [Built-in commands / variables](#builtin)
+* [Reading data](#readingdata)
+* [Extract/Transform/Load (ETL) data](#etl)
+* [Exploring data](#exploringdata)
+* [Plotting: Base](#plotbase)
+* [Plotting: Lattice](#plotlattice)
+* [Plotting: ggplot2](#plotggplot2)
+* [Plotting: devices](#plotdevices)
+* [Knitr](#knitr)
 
-## Basics
+
+
+## <a name="basics"></a>Basics
 
     x <- 1
     x = 1
@@ -48,7 +61,7 @@ Loops:
 
 
 
-## Vectors and Matrices and Data Frames
+## <a name="vectors"></a>Vectors and Matrices and Data Frames
 
 
 * Vectors:
@@ -284,7 +297,7 @@ Loops:
 
 
 
-## Built-in commands / variables
+## <a name="builtin"></a>Built-in commands / variables
 
     
 Installing Packages:
@@ -368,7 +381,7 @@ apply Functions:
     # always returns a list
     lapply(f, mean)             # apply function 'mean' to every element of f
 
-    sapply(x, y)  
+    sapply(x, mean)  
     # like lapply but "simplifies" result
     # i.e if lapply returns a list of vectors with length 1, sapply returns a single vector
     # if lapply returns a list of vectors all of the same length, sapply returns a matrix
@@ -466,7 +479,7 @@ Profiling and Debug:
 
 
 
-## Reading data
+## <a name="readingdata"></a>Reading data
 
 
     read.table 
@@ -668,7 +681,7 @@ First need to setup JAVA_HOME and PATH to avoid these errors:
                       colIndex=c(1:5,7:9))
 
 
-## Extract/Transform/Load (ETL) data
+## <a name="etl"></a>Extract/Transform/Load (ETL) data
 
 
 [https://github.com/natapone/RepData_PeerAssessment1/blob/master/PA1_template.md](https://github.com/natapone/RepData_PeerAssessment1/blob/master/PA1_template.md)
@@ -778,7 +791,7 @@ tidyr: for cleaning/transforming data frames
 
 
 
-## Exploring data
+## <a name="exploringdata"></a>Exploring data
 
     str
     summary
@@ -790,7 +803,7 @@ tidyr: for cleaning/transforming data frames
 
 
 
-## Plotting: Base
+## <a name="plotbase"></a>Plotting: Base
 
 Plotting systems in R (note: can't be mixed)
 
@@ -825,7 +838,7 @@ Base plotting system:
     * legend
 
 
-## Plotting: Lattice
+## <a name="plotlattice"></a>Plotting: Lattice
 
 * Packages: 
     * graphics
@@ -862,7 +875,7 @@ Base plotting system:
 
 
 
-## Plotting: ggplot2
+## <a name="plotggplot2"></a>Plotting: ggplot2
 
 
 
@@ -965,7 +978,7 @@ Colors:
 
 
 
-## Plotting: devices
+## <a name="plotdevices"></a>Plotting: devices
 
     pdf(filename)
     dev.off()  <-- remember to use this when plotting to files!
@@ -993,7 +1006,7 @@ Colors:
 
 
 
-## Knitr
+## <a name="knitr"></a>Knitr
 
     library(knitr)
     knit
