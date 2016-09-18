@@ -438,6 +438,8 @@ Annualized return over k years:
 
     (e^x)^y = e^(x*y)
 
+    e^r ~= 1 + r            : when r is small (r < 0.2)
+
 
 
 ## <a name="ccpr"></a>Continously Compounded Portfolio Returns 

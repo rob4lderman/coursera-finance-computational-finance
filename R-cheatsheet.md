@@ -1,26 +1,27 @@
 
 
-# R Cheatsheet
-
+# R Cheatsheet: RETIRED!! See new copy in notes-and-cheatsheets.
 
 Main website: [http://cran.r-project.org/](http://cran.r-project.org/)
 
+* [Basics](#Basics)
+* [Control Structures (if, for, while):](#Control-Structures--if,-for,-while--)
+* [Vectors and Matrices and Data Frames](#Vectors-and-Matrices-and-Data-Frames)
+* [Functions](#Functions)
+* [Built-in commands / variables](#Built-in-commands---variables)
+* [Reading data](#Reading-data)
+* [Extract/Transform/Load (ETL) data](#Extract-Transform-Load--ETL--data)
+* [Exploring data](#Exploring-data)
+* [Plotting: Base](#Plotting--Base)
+* [Plotting: Lattice](#Plotting--Lattice)
+* [Plotting: ggplot2](#Plotting--ggplot2)
+* [Plotting: devices](#Plotting--devices)
+* [Knitr](#Knitr)
 
-* [Basics](#basics)
-* [Vectors and Matrices and Data Frames](#vectors)
-* [Built-in commands / variables](#builtin)
-* [Reading data](#readingdata)
-* [Extract/Transform/Load (ETL) data](#etl)
-* [Exploring data](#exploringdata)
-* [Plotting: Base](#plotbase)
-* [Plotting: Lattice](#plotlattice)
-* [Plotting: ggplot2](#plotggplot2)
-* [Plotting: devices](#plotdevices)
-* [Knitr](#knitr)
 
 
 
-## <a name="basics"></a>Basics
+## <a name="Basics"></a>Basics
 
     x <- 1
     x = 1
@@ -38,6 +39,7 @@ Main website: [http://cran.r-project.org/](http://cran.r-project.org/)
 
 
 
+
 Class / Cast / Coersion / Types
 
     attributes(x)
@@ -48,7 +50,9 @@ Class / Cast / Coersion / Types
     as.character(x)
 
 
-Loops:
+## <a name="Control-Structures--if,-for,-while--"></a>Control Structures (if, for, while):
+
+[http://www.statmethods.net/management/controlstructures.html](http://www.statmethods.net/management/controlstructures.html)
 
     # 1:length(<vector>)
     for (i in seq_along(<vector>)) {
@@ -58,10 +62,27 @@ Loops:
     for (i in seq_len(<len>)) {
     }
 
+    tryCatch( { get.hist.quote(instrument=symbol,
+                               start=start,
+                               end=end,
+                               quote=quote,
+                               provider=provider,
+                               origin=origin,
+                               compression=compression,
+                               retclass=retclass,
+                               quiet = quiet)
+              },
+              warning = function(war) {
+                  print(war)
+                  return( zoo() )
+              },
+              error = function(err) {
+                  print(err)
+                  return( zoo() )
+              })
 
 
-
-## <a name="vectors"></a>Vectors and Matrices and Data Frames
+## <a name="Vectors-and-Matrices-and-Data-Frames"></a>Vectors and Matrices and Data Frames
 
 
 * Vectors:
@@ -296,8 +317,19 @@ Loops:
     2: 2 96.66534
 
 
+## <a name="Functions"></a>Functions
 
-## <a name="builtin"></a>Built-in commands / variables
+    myFunc <- function(x, 
+                       y=2,         # supply default value
+                       z=1/x) {     # default value based on another parameter
+        x + y + z
+    }
+
+    source("binomial-model.R")          # include file
+
+
+
+## <a name="Built-in-commands---variables"></a>Built-in commands / variables
 
     
 Installing Packages:
@@ -479,7 +511,7 @@ Profiling and Debug:
 
 
 
-## <a name="readingdata"></a>Reading data
+## <a name="Reading-data"></a>Reading data
 
 
     read.table 
@@ -681,7 +713,7 @@ First need to setup JAVA_HOME and PATH to avoid these errors:
                       colIndex=c(1:5,7:9))
 
 
-## <a name="etl"></a>Extract/Transform/Load (ETL) data
+## <a name="Extract-Transform-Load--ETL--data"></a>Extract/Transform/Load (ETL) data
 
 
 [https://github.com/natapone/RepData_PeerAssessment1/blob/master/PA1_template.md](https://github.com/natapone/RepData_PeerAssessment1/blob/master/PA1_template.md)
@@ -791,7 +823,7 @@ tidyr: for cleaning/transforming data frames
 
 
 
-## <a name="exploringdata"></a>Exploring data
+## <a name="Exploring-data"></a>Exploring data
 
     str
     summary
@@ -803,7 +835,7 @@ tidyr: for cleaning/transforming data frames
 
 
 
-## <a name="plotbase"></a>Plotting: Base
+## <a name="Plotting--Base"></a>Plotting: Base
 
 Plotting systems in R (note: can't be mixed)
 
@@ -838,7 +870,7 @@ Base plotting system:
     * legend
 
 
-## <a name="plotlattice"></a>Plotting: Lattice
+## <a name="Plotting--Lattice"></a>Plotting: Lattice
 
 * Packages: 
     * graphics
@@ -875,7 +907,7 @@ Base plotting system:
 
 
 
-## <a name="plotggplot2"></a>Plotting: ggplot2
+## <a name="Plotting--ggplot2"></a>Plotting: ggplot2
 
 
 
@@ -978,7 +1010,7 @@ Colors:
 
 
 
-## <a name="plotdevices"></a>Plotting: devices
+## <a name="Plotting--devices"></a>Plotting: devices
 
     pdf(filename)
     dev.off()  <-- remember to use this when plotting to files!
@@ -1006,7 +1038,7 @@ Colors:
 
 
 
-## <a name="knitr"></a>Knitr
+## <a name="Knitr"></a>Knitr
 
     library(knitr)
     knit
@@ -1028,6 +1060,7 @@ Colors:
     time <- sys.time()
     ```
     The current time is `r time`
+
 
 
 

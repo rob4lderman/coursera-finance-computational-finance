@@ -485,7 +485,7 @@ MSE = Square the diff between the estimated value and the true value
     * `^theta +/- 3 * SE(^theta)`
     * the range will include the true value, `theta`
     * with a probability approximately equal to 0.99
-    * i.e, `Pr( ^theta-3*SE(^theta) <= theta <= ^theta+3*SE(^theta) ) ~= 0.95`
+    * i.e, `Pr( ^theta-3*SE(^theta) <= theta <= ^theta+3*SE(^theta) ) ~= 0.99`
 
 95% conf intervals for mu, sigma, rho:
 
